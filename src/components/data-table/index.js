@@ -10,7 +10,8 @@ import Paper from '@material-ui/core/Paper'
 const useStyles = makeStyles({
   tableContainer: {
     width: '100%',
-    overflowX: 'auto',
+    height: 480,
+    overflow: 'auto',
   },
   table: {
     minWidth: 650,

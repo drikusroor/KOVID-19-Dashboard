@@ -3,20 +3,20 @@ import { Field, reduxForm } from 'redux-form'
 import { compose } from 'redux'
 import { connect } from 'react-redux'
 import { makeStyles, useTheme } from '@material-ui/core/styles'
-import TextField from '@material-ui/core/TextField'
 import Checkbox from '@material-ui/core/Checkbox'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import FormControl from '@material-ui/core/FormControl'
 import Select from '@material-ui/core/Select'
 import InputLabel from '@material-ui/core/InputLabel'
-import FormHelperText from '@material-ui/core/FormHelperText'
-import Radio from '@material-ui/core/Radio'
-import RadioGroup from '@material-ui/core/RadioGroup'
 import { Grid } from '@material-ui/core'
 import Chip from '@material-ui/core/Chip'
 import Input from '@material-ui/core/Input'
 import MenuItem from '@material-ui/core/MenuItem'
-import { removeCountry, setCountryFilter } from '../../store/filters/actions'
+import {
+  removeCountry,
+  setCountryFilter,
+  toggleShowPerCountry,
+} from '../../store/filters/actions'
 
 const useStyles = makeStyles(theme => ({
   formControl: {
@@ -35,35 +35,23 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-const renderTextField = ({
-  label,
-  input,
-  meta: { touched, invalid, error },
-  ...custom
-}) => (
-  <TextField
-    label={label}
-    placeholder={label}
-    error={touched && invalid}
-    helperText={touched && error}
-    {...input}
-    {...custom}
-  />
-)
+const renderCheckbox = props => {
+  const { input, label } = props
 
-const renderCheckbox = ({ input, label }) => (
-  <div>
-    <FormControlLabel
-      control={
-        <Checkbox
-          checked={input.value ? true : false}
-          onChange={input.onChange}
-        />
-      }
-      label={label}
-    />
-  </div>
-)
+  return (
+    <div>
+      <FormControlLabel
+        control={
+          <Checkbox
+            checked={input.value ? true : false}
+            onChange={input.onChange}
+          />
+        }
+        label={label}
+      />
+    </div>
+  )
+}
 
 const ITEM_HEIGHT = 48
 const ITEM_PADDING_TOP = 8
@@ -86,50 +74,24 @@ function getStyles(name, personName, theme) {
   }
 }
 
-const renderFromHelper = ({ touched, error }) => {
-  if (!(touched && error)) {
-    return
-  } else {
-    return <FormHelperText>{touched && error}</FormHelperText>
-  }
-}
-
-const renderSelectField = ({
-  input,
-  label,
-  meta: { touched, error },
-  children,
-  ...custom
-}) => (
-  <FormControl error={touched && error}>
-    <InputLabel htmlFor="age-native-simple">Age</InputLabel>
-    <Select
-      native
-      {...input}
-      {...custom}
-      inputProps={{
-        name: 'age',
-        id: 'age-native-simple',
-      }}
-    >
-      {children}
-    </Select>
-    {renderFromHelper({ touched, error })}
-  </FormControl>
-)
-
 const FilterForm = props => {
   const {
     countries,
-    countryFilter,
+    filters,
     handleSubmit,
     removeCountry,
     setCountryFilter,
+    toggleShowPerCountry,
   } = props
   const classes = useStyles()
   const theme = useTheme()
 
-  const handleChange = event => {
+  const {
+    COUNTRY_FILTER: countryFilter,
+    SHOW_PER_COUNTRY: showPerCountry,
+  } = filters
+
+  const handleCountrySelectChange = event => {
     setCountryFilter(event.target.value)
   }
 
@@ -138,10 +100,14 @@ const FilterForm = props => {
     removeCountry(value)
   }
 
+  const handleToggleShowPerCountry = event => {
+    toggleShowPerCountry(event.target.checked)
+  }
+
   return (
     <form onSubmit={handleSubmit}>
       <Grid container>
-        <Grid item md={9}>
+        <Grid item md={8} lg={9}>
           <div>
             <FormControl className={classes.formControl}>
               <InputLabel id="demo-mutiple-chip-label">
@@ -152,7 +118,7 @@ const FilterForm = props => {
                 id="demo-mutiple-chip"
                 multiple
                 value={countryFilter}
-                onChange={handleChange}
+                onChange={handleCountrySelectChange}
                 input={<Input id="select-multiple-chip" />}
                 defaultValue={[]}
                 renderValue={selected => {
@@ -184,12 +150,13 @@ const FilterForm = props => {
             </FormControl>
           </div>
         </Grid>
-        <Grid item md={3}>
+        <Grid item md={4} lg={3}>
           <div>
             <Field
-              name="perCountry"
+              name="showPerCountry"
               component={renderCheckbox}
               label="Combine states / provinces"
+              onChange={e => handleToggleShowPerCountry(e)}
             />
           </div>
         </Grid>
@@ -202,8 +169,12 @@ export default compose(
   connect(state => ({}), {
     removeCountry,
     setCountryFilter,
+    toggleShowPerCountry,
   }),
   reduxForm({
     form: 'FilterForm', // a unique identifier for this form
+    initialValues: {
+      showPerCountry: true,
+    },
   }),
 )(FilterForm)

@@ -22,6 +22,15 @@ export const filtersReducer = function(state = initialState.filters, action) {
         ...state,
         COUNTRY_FILTER: [...action.payload],
       }
+    case types.FILTERS_TOGGLE_SHOW_PER_COUNTRY:
+      return {
+        ...state,
+        SHOW_PER_COUNTRY: action.payload
+          ? action.payload
+          : state.SHOW_PER_COUNTRY
+          ? !state.SHOW_PER_COUNTRY
+          : false,
+      }
     default:
       return state
   }

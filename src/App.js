@@ -25,7 +25,7 @@ function Copyright() {
   )
 }
 
-function App({ countries, countryFilter, fetchTimeSeries, timeSeries }) {
+function App({ countries, filters, fetchTimeSeries, timeSeries }) {
   useEffect(() => {
     fetchTimeSeries()
   }, [])
@@ -36,7 +36,7 @@ function App({ countries, countryFilter, fetchTimeSeries, timeSeries }) {
         <Typography variant="h4" component="h1" gutterBottom>
           COVID-19 histogram per country
         </Typography>
-        <FilterForm countries={countries} countryFilter={countryFilter} />
+        <FilterForm countries={countries} filters={filters} />
         <DataTableTabs datasets={timeSeries} />
         <Copyright />
       </Box>
@@ -48,7 +48,7 @@ export default connect(
   state => {
     return {
       countries: getCountries(state),
-      countryFilter: state.filters.COUNTRY_FILTER || [],
+      filters: state.filters,
       timeSeries: getFilteredTimeSeries(state),
     }
   },
