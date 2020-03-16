@@ -6,6 +6,17 @@ import { Paper, Button } from '@material-ui/core'
 
 const useStyles = makeStyles(theme => ({}))
 
+const colors = [
+  '#003f5c',
+  '#2f4b7c',
+  '#665191',
+  '#a05195',
+  '#d45087',
+  '#f95d6a',
+  '#ff7c43',
+  '#ffa600',
+]
+
 export default function LineGraph({
   dataset,
   filters: { SHOW_PER_COUNTRY: showPerCountry },
@@ -15,7 +26,7 @@ export default function LineGraph({
   const [logarithmic, setLogarithmic] = useState(false)
 
   const labels = dataset[0].slice(4, dataset[0].length)
-  const rows = dataset.slice(1, dataset.length > 25 ? 25 : dataset.length)
+  const rows = dataset.slice(1, dataset.length > 8 ? 8 : dataset.length)
 
   const datasets = rows.map((row, index) => {
     return {
@@ -24,6 +35,7 @@ export default function LineGraph({
         : `${row[0] ? row[0] + ', ' : ''}${row[1]}`,
       type: 'line',
       data: row.slice(4, row.length).map(value => parseInt(value)),
+      borderColor: colors[index],
     }
   })
 
