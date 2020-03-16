@@ -97,7 +97,11 @@ const FilterForm = props => {
 
   const onDelete = (event, value) => {
     event.stopPropagation()
-    removeCountry(value)
+    if (value) {
+      removeCountry(value)
+    } else {
+      setCountryFilter([])
+    }
   }
 
   const handleToggleShowPerCountry = event => {
@@ -127,11 +131,20 @@ const FilterForm = props => {
                       {selected.map(value => (
                         <Chip
                           key={value}
+                          color="secondary"
                           label={value}
                           className={classes.chip}
                           onDelete={event => onDelete(event, value)}
                         />
                       ))}
+                      {selected && selected.length > 0 && (
+                        <Chip
+                          label="Clear filter"
+                          className={classes.chip}
+                          onClick={event => onDelete(event)}
+                          onDelete={event => onDelete(event)}
+                        />
+                      )}
                     </div>
                   )
                 }}
