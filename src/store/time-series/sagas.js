@@ -4,7 +4,13 @@ import types from '../types'
 
 function* fetchTimeSeriesSaga(action) {
   try {
-    const datasets = yield call(api.fetchTimeSeries)
+    let datasets = yield call(api.fetchTimeSeries)
+    datasets = datasets.map(dataset => {
+      return {
+        headers: dataset[0],
+        data: dataset.slice(1, dataset.length),
+      }
+    })
     yield put({
       type: types.TIME_SERIES_FETCH_SUCCESS,
       payload: datasets,

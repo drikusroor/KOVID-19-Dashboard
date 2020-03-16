@@ -27,12 +27,14 @@ export default function LineGraph({
 }) {
   const classes = useStyles()
 
+  const { headers, data: rows } = dataset
+
   const [logarithmic, setLogarithmic] = useState(false)
 
-  const labels = dataset[0].slice(4, dataset[0].length)
-  const rows = dataset.slice(1, dataset.length > 8 ? 8 : dataset.length)
+  const labels = headers.slice(4, headers.length)
+  const topRows = rows.slice(0, rows.length > 8 ? 8 : rows.length)
 
-  const datasets = rows.map((row, index) => {
+  const datasets = topRows.map((row, index) => {
     return {
       label: showPerCountry
         ? row[1]

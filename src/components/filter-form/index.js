@@ -86,7 +86,6 @@ const FilterForm = props => {
             getOptionLabel={option => option}
             value={countryFilter}
             filterSelectedOptions
-            fullWidth
             onChange={handleCountrySelectChange}
             renderInput={params => (
               <TextField
