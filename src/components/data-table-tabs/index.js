@@ -46,7 +46,7 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-export default function DataTableTabs({ datasets }) {
+export default function DataTableTabs({ datasets, filters }) {
   const classes = useStyles()
   const [value, setValue] = React.useState(0)
 
@@ -70,17 +70,17 @@ export default function DataTableTabs({ datasets }) {
       {datasets ? (
         <>
           <TabPanel value={value} index={0}>
-            <LineGraph dataset={datasets[0]} />
+            <LineGraph dataset={datasets[0]} filters={filters} />
             <br />
             <DataTable dataset={datasets[0]} />
           </TabPanel>
           <TabPanel value={value} index={1}>
-            <LineGraph dataset={datasets[1]} />
+            <LineGraph dataset={datasets[1]} filters={filters} />
             <br />
             <DataTable dataset={datasets[1]} />
           </TabPanel>
           <TabPanel value={value} index={2}>
-            <LineGraph dataset={datasets[2]} />
+            <LineGraph dataset={datasets[2]} filters={filters} />
             <br />
             <DataTable dataset={datasets[2]} />
           </TabPanel>

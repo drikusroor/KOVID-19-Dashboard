@@ -37,7 +37,7 @@ function App({ countries, filters, fetchTimeSeries, timeSeries }) {
           COVID-19 histogram per country
         </Typography>
         <FilterForm countries={countries} filters={filters} />
-        <DataTableTabs datasets={timeSeries} />
+        <DataTableTabs datasets={timeSeries} filters={filters} />
         <Copyright />
       </Box>
     </Container>

@@ -1,7 +1,7 @@
 export const initialState = {
   filters: {
     SHOW_PER_COUNTRY: true,
-    COUNTRY_FILTER: [],
+    COUNTRY_FILTER: ['China', 'Netherlands'],
   },
   timeSeries: {
     data: null,
