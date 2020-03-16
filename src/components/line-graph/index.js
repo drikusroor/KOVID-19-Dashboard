@@ -4,7 +4,11 @@ import { Line } from 'react-chartjs-2'
 import _ from 'lodash'
 import { Paper, Button } from '@material-ui/core'
 
-const useStyles = makeStyles(theme => ({}))
+const useStyles = makeStyles(theme => ({
+  root: {
+    padding: theme.spacing(),
+  },
+}))
 
 const colors = [
   '#003f5c',
@@ -55,7 +59,11 @@ export default function LineGraph({
 
   return (
     <Paper className={classes.root}>
-      <Button onClick={() => setLogarithmic(!logarithmic)}>
+      <Button
+        onClick={() => setLogarithmic(!logarithmic)}
+        variant="contained"
+        color="secondary"
+      >
         Show {logarithmic ? 'linear' : 'logaritmic'}
       </Button>
       <Line data={data} options={options} height={480} />
