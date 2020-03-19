@@ -1,7 +1,5 @@
-import { Container, Typography } from '@material-ui/core'
-import Box from '@material-ui/core/Box'
 import { Layout } from '../../components/layout'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import DataTableTabs from '../../components/data-table-tabs'
 import { connect } from 'react-redux'
 import { setCountryFilter } from '../../store/filters/actions'
