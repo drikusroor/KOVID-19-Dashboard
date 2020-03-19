@@ -20,12 +20,11 @@ const ChartPage = ({
   timeSeries,
 }) => {
   const { country, type } = useParams()
-  if (country && type) {
-    setCountryFilter([country])
-  } else if (type) {
-  }
   useEffect(() => {
-    fetchTimeSeries()
+    if (country) {
+      setCountryFilter([country])
+    }
+    fetchTimeSeries(type)
   }, [])
 
   return (
