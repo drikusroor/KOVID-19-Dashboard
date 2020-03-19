@@ -5,9 +5,10 @@ import { connect } from 'react-redux'
 import { makeStyles, useTheme } from '@material-ui/core/styles'
 import Checkbox from '@material-ui/core/Checkbox'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
-import { Grid } from '@material-ui/core'
+import { Grid, Slider, Tooltip, Paper, Box } from '@material-ui/core'
 import {
   setCountryFilter,
+  setDateRange,
   toggleShowPerCountry,
 } from '../../store/filters/actions'
 import Autocomplete from '@material-ui/lab/Autocomplete'
@@ -31,6 +32,10 @@ const useStyles = makeStyles(theme => ({
   noLabel: {
     marginTop: theme.spacing(3),
   },
+  slider: {
+    paddingLeft: theme.spacing(4),
+    paddingRight: theme.spacing(4),
+  },
 }))
 
 const renderCheckbox = props => {
@@ -51,21 +56,45 @@ const renderCheckbox = props => {
   )
 }
 
+function ValueLabelComponent(props) {
+  const { children, open, value } = props
+
+  return (
+    <Tooltip open={open} enterTouchDelay={0} placement="top" title={value}>
+      {children}
+    </Tooltip>
+  )
+}
+
 const FilterForm = props => {
   const {
     countries,
     filters,
     handleSubmit,
     setCountryFilter,
+    setDateRange,
+    timeSeries,
     toggleShowPerCountry,
   } = props
   const classes = useStyles()
   const theme = useTheme()
 
+  const { headers = [] } = (timeSeries && timeSeries[0]) || { headers: [] }
+
+  const dates = headers.length > 4 ? headers.slice(4, headers.length) : []
+
+  const marks = [
+    { value: 0, label: dates[0] },
+    { value: dates.length - 1, label: dates[dates.length - 1] },
+  ]
+
   const {
     COUNTRY_FILTER: countryFilter,
     SHOW_PER_COUNTRY: showPerCountry,
+    DATE_RANGE: dateRange,
   } = filters
+
+  const SLIDER_ENABLED = false
 
   const handleCountrySelectChange = (event, value) => {
     setCountryFilter(value)
@@ -73,6 +102,14 @@ const FilterForm = props => {
 
   const handleToggleShowPerCountry = event => {
     toggleShowPerCountry(event.target.checked)
+  }
+
+  const handleDateRangeChange = (event, newValue) => {
+    setDateRange(newValue)
+  }
+
+  const valuetext = value => {
+    return dates && dates.length > 0 ? dates[value] : 'No value'
   }
 
   return (
@@ -108,6 +145,26 @@ const FilterForm = props => {
             />
           </div>
         </Grid>
+        <Grid item xs={12}>
+          {SLIDER_ENABLED && marks && marks.length > 0 ? (
+            <Box className={classes.slider}>
+              <Slider
+                value={dateRange}
+                onChange={handleDateRangeChange}
+                aria-labelledby="discrete-slider-custom"
+                valueLabelDisplay="on"
+                steps={null}
+                marks={marks}
+                getAriaLabel={valuetext}
+                getAriaValueText={valuetext}
+                min={0}
+                max={dates.length - 1}
+                valueLabelFormat={valuetext}
+                ValueLabelComponent={ValueLabelComponent}
+              />
+            </Box>
+          ) : null}
+        </Grid>
       </Grid>
     </form>
   )
@@ -116,6 +173,7 @@ const FilterForm = props => {
 export default compose(
   connect(state => ({}), {
     setCountryFilter,
+    setDateRange,
     toggleShowPerCountry,
   }),
   reduxForm({

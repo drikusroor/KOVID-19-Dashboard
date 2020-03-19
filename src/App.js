@@ -36,7 +36,14 @@ function App({ countries, filters, fetchTimeSeries, timeSeries }) {
         <Typography variant="h4" component="h1" gutterBottom>
           COVID-19 histogram per country
         </Typography>
-        <FilterForm countries={countries} filters={filters} />
+        {timeSeries && timeSeries[0] && timeSeries[0].headers ? (
+          <FilterForm
+            countries={countries}
+            timeSeries={timeSeries}
+            filters={filters}
+          />
+        ) : null}
+
         <DataTableTabs datasets={timeSeries} filters={filters} />
         <Copyright />
       </Box>

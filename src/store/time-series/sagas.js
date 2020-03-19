@@ -1,4 +1,4 @@
-import { call, put, takeEvery, takeLatest } from 'redux-saga/effects'
+import { call, put } from 'redux-saga/effects'
 import api from '../../services/api'
 import types from '../types'
 
@@ -10,6 +10,10 @@ function* fetchTimeSeriesSaga(action) {
         headers: dataset[0],
         data: dataset.slice(1, dataset.length),
       }
+    })
+    yield put({
+      type: types.FILTERS_SET_DATE_RANGE,
+      payload: [0, datasets[0].headers.length - 1],
     })
     yield put({
       type: types.TIME_SERIES_FETCH_SUCCESS,

@@ -31,6 +31,11 @@ export const filtersReducer = function(state = initialState.filters, action) {
           ? !state.SHOW_PER_COUNTRY
           : false,
       }
+    case types.FILTERS_SET_DATE_RANGE:
+      return {
+        ...state,
+        DATE_RANGE: action.payload,
+      }
     default:
       return state
   }
