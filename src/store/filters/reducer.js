@@ -27,7 +27,7 @@ export const filtersReducer = function(state = initialState.filters, action) {
         ...state,
         DEATH_RATE: action.payload,
       }
-    case types.FILTERS_TIME_TO_DEATH:
+    case types.FILTERS_SET_TIME_TO_DEATH:
       return {
         ...state,
         TIME_TO_DEATH: action.payload,

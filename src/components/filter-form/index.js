@@ -147,6 +147,11 @@ const FilterForm = props => {
               onChange={handleChangeDeathRate}
               value={deathRate}
               type="number"
+              inputProps={{
+                min: '0.001',
+                max: '0.999',
+                step: '0.001',
+              }}
             />
           </div>
         </Grid>
