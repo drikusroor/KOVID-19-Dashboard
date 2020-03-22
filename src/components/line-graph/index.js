@@ -21,10 +21,7 @@ const colors = [
   '#ffa600',
 ]
 
-export default function LineGraph({
-  dataset,
-  filters: { SHOW_PER_COUNTRY: showPerCountry },
-}) {
+export default function LineGraph({ dataset, filters: { showPerCountry } }) {
   const classes = useStyles()
 
   const { headers, data: rows } = dataset

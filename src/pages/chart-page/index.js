@@ -2,12 +2,12 @@ import { Layout } from '../../components/layout'
 import React, { useEffect } from 'react'
 import DataTableTabs from '../../components/data-table-tabs'
 import { connect } from 'react-redux'
-import { setCountryFilter } from '../../store/filters/actions'
 import { fetchTimeSeries } from '../../store/time-series/actions'
 import {
   getFilteredTimeSeries,
   getCountries,
 } from '../../store/time-series/selectors'
+import { getFilterFormValues } from '../../store/form/selectors'
 import FilterForm from '../../components/filter-form'
 import { useParams } from 'react-router-dom'
 
@@ -16,14 +16,10 @@ const ChartPage = ({
   initialFilters,
   filters,
   fetchTimeSeries,
-  setCountryFilter,
   timeSeries,
 }) => {
-  const { country, type } = useParams()
+  const { type } = useParams()
   useEffect(() => {
-    if (country) {
-      setCountryFilter([country])
-    }
     fetchTimeSeries(type)
   }, [])
 
@@ -43,12 +39,11 @@ export default connect(
   state => {
     return {
       countries: getCountries(state),
-      filters: state.filters,
+      filters: getFilterFormValues(state),
       timeSeries: getFilteredTimeSeries(state),
     }
   },
   {
     fetchTimeSeries,
-    setCountryFilter,
   },
 )(ChartPage)
