@@ -22,6 +22,16 @@ export const filtersReducer = function(state = initialState.filters, action) {
         ...state,
         COUNTRY_FILTER: [...action.payload],
       }
+    case types.FILTERS_SET_DEATH_RATE:
+      return {
+        ...state,
+        DEATH_RATE: action.payload,
+      }
+    case types.FILTERS_TIME_TO_DEATH:
+      return {
+        ...state,
+        TIME_TO_DEATH: action.payload,
+      }
     case types.FILTERS_TOGGLE_SHOW_PER_COUNTRY:
       return {
         ...state,

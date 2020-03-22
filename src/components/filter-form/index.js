@@ -8,6 +8,8 @@ import FormControlLabel from '@material-ui/core/FormControlLabel'
 import { Grid } from '@material-ui/core'
 import {
   setCountryFilter,
+  setDeathRate,
+  setTimeToDeath,
   toggleShowPerCountry,
 } from '../../store/filters/actions'
 import Autocomplete from '@material-ui/lab/Autocomplete'
@@ -51,12 +53,30 @@ const renderCheckbox = props => {
   )
 }
 
+const renderTextField = ({
+  label,
+  input,
+  meta: { touched, invalid, error },
+  ...custom
+}) => (
+  <TextField
+    label={label}
+    placeholder={label}
+    error={touched && invalid}
+    helperText={touched && error}
+    {...input}
+    {...custom}
+  />
+)
+
 const FilterForm = props => {
   const {
     countries,
     filters,
     handleSubmit,
     setCountryFilter,
+    setDeathRate,
+    setTimeToDeath,
     toggleShowPerCountry,
   } = props
   const classes = useStyles()
@@ -64,15 +84,24 @@ const FilterForm = props => {
 
   const {
     COUNTRY_FILTER: countryFilter,
+    DEATH_RATE: deathRate,
+    TIME_TO_DEATH: timeToDeath,
     SHOW_PER_COUNTRY: showPerCountry,
   } = filters
 
-  const handleCountrySelectChange = (event, value) => {
+  const handleCountrySelectChange = (_event, value) => {
     setCountryFilter(value)
   }
 
   const handleToggleShowPerCountry = event => {
     toggleShowPerCountry(event.target.checked)
+  }
+
+  const handleChangeDeathRate = (_event, value) => {
+    setDeathRate(value)
+  }
+  const handleChangeTimeToDeath = (_event, value) => {
+    setTimeToDeath(value)
   }
 
   return (
@@ -108,6 +137,32 @@ const FilterForm = props => {
             />
           </div>
         </Grid>
+        <Grid item md={4} lg={2}>
+          <div>
+            <Field
+              fullWidth
+              name="deathRate"
+              component={renderTextField}
+              label="Death rate"
+              onChange={handleChangeDeathRate}
+              value={deathRate}
+              type="number"
+            />
+          </div>
+        </Grid>
+        <Grid item md={4} lg={2}>
+          <div>
+            <Field
+              fullWidth
+              name="timeToDeath"
+              component={renderTextField}
+              label="Days until death"
+              onChange={handleChangeTimeToDeath}
+              value={timeToDeath}
+              type="number"
+            />
+          </div>
+        </Grid>
       </Grid>
     </form>
   )
@@ -116,11 +171,15 @@ const FilterForm = props => {
 export default compose(
   connect(state => ({}), {
     setCountryFilter,
+    setDeathRate,
+    setTimeToDeath,
     toggleShowPerCountry,
   }),
   reduxForm({
     form: 'FilterForm', // a unique identifier for this form
     initialValues: {
+      deathRate: 0.014,
+      timeToDeath: 17,
       showPerCountry: true,
     },
   }),

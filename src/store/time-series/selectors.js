@@ -1,4 +1,5 @@
 import { createSelector } from 'reselect'
+import { calculateEstimations } from './helpers/calculate-estimations'
 
 const getTimeSeries = state => state.timeSeries.data
 
@@ -172,6 +173,12 @@ export const getFilteredTimeSeries = createSelector(
           ],
         }
       })
+    }
+
+    const showEstimations = true
+
+    if (showEstimations) {
+      datasets = calculateEstimations(datasets, filters)
     }
 
     return datasets

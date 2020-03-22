@@ -12,6 +12,8 @@ export const removeCountry = createAction(
 
 export const setCountryFilter = createAction(types.FILTERS_SET_COUNTRY_FILTER)
 
+export const setDeathRate = createAction(types.FILTERS_SET_DEATH_RATE)
+export const setTimeToDeath = createAction(types.FILTERS_SET_TIME_TO_DEATH)
 export const toggleShowPerCountry = createAction(
   types.FILTERS_TOGGLE_SHOW_PER_COUNTRY,
 )
