@@ -8,16 +8,13 @@ export const estimateConfirmedRow = (
   })
   const [_dRegion, _dCountry, _dLat, _dLon, ...dData] = dRow
 
-  const { DEATH_RATE, TIME_TO_DEATH } = filters
+  const { deathRate, timeToDeath } = filters
 
   let eData = dData.map((column, index) => {
-    console.log({ column })
-    return column / DEATH_RATE || (column === 0 ? 0 : undefined)
+    return column / deathRate || (column === 0 ? 0 : undefined)
   })
 
-  console.log({ eData })
-  eData = eData.slice(TIME_TO_DEATH, eData.length)
-  console.log({ eData })
+  eData = eData.slice(timeToDeath, eData.length)
   if (region) {
     region = `${region} (estimation)`
   } else if (country) {

@@ -19,7 +19,7 @@ export const getCountries = state => {
   ).sort()
 }
 
-export const getFilters = state => state.filters || {}
+export const getForms = state => state.form || {}
 
 export const modifyTimeSerieRows = (datasets, modificationFn, params) => {
   return datasets.map(dataset => {
@@ -108,13 +108,13 @@ export const getTimeSeriesTotalPerPredicate = (rows, { predicate, key }) => {
     .map(key => rowsPerCountry[key])
 }
 
-export const getCountryFilteredTimeSeries = (rows, countryFilter) => {
+export const getCountryFilteredTimeSeries = (rows, countryFilter = []) => {
   return rows.filter(row => countryFilter.some(country => country === row[1]))
 }
 
 export const getFilteredTimeSeries = createSelector(
-  [getTimeSeries, getFilters],
-  (datasets, filters) => {
+  [getTimeSeries, getForms],
+  (datasets, forms) => {
     if (!datasets) return null
 
     const total = modifyTimeSerieRows(
@@ -126,14 +126,20 @@ export const getFilteredTimeSeries = createSelector(
       },
     )
 
-    if (filters.SHOW_PER_COUNTRY)
+    const {
+      FilterForm: {
+        values: { countryFilter, showEstimates, showPerCountry },
+      },
+    } = forms
+
+    if (showPerCountry)
       datasets = modifyTimeSerieRows(datasets, getTimeSeriesPerCountry)
 
-    if (filters.COUNTRY_FILTER && filters.COUNTRY_FILTER.length > 0) {
+    if (countryFilter && countryFilter.length > 0) {
       datasets = modifyTimeSerieRows(
         datasets,
         getCountryFilteredTimeSeries,
-        filters.COUNTRY_FILTER,
+        countryFilter,
       )
 
       datasets = datasets.map((dataset, index) => {
@@ -175,10 +181,8 @@ export const getFilteredTimeSeries = createSelector(
       })
     }
 
-    const showEstimations = true
-
-    if (showEstimations) {
-      datasets = calculateEstimations(datasets, filters)
+    if (showEstimates) {
+      datasets = calculateEstimations(datasets, forms.FilterForm.values)
     }
 
     return datasets

@@ -1,17 +1,11 @@
 import React from 'react'
-import { Field, reduxForm } from 'redux-form'
+import { change, Field, formValueSelector, reduxForm } from 'redux-form'
 import { compose } from 'redux'
 import { connect } from 'react-redux'
 import { makeStyles, useTheme } from '@material-ui/core/styles'
 import Checkbox from '@material-ui/core/Checkbox'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import { Grid } from '@material-ui/core'
-import {
-  setCountryFilter,
-  setDeathRate,
-  setTimeToDeath,
-  toggleShowPerCountry,
-} from '../../store/filters/actions'
 import Autocomplete from '@material-ui/lab/Autocomplete'
 import TextField from '@material-ui/core/TextField'
 
@@ -70,51 +64,26 @@ const renderTextField = ({
 )
 
 const FilterForm = props => {
-  const {
-    countries,
-    filters,
-    handleSubmit,
-    setCountryFilter,
-    setDeathRate,
-    setTimeToDeath,
-    toggleShowPerCountry,
-  } = props
+  const { change, countries, countryFilter } = props
   const classes = useStyles()
-  const theme = useTheme()
-
-  const {
-    COUNTRY_FILTER: countryFilter,
-    DEATH_RATE: deathRate,
-    TIME_TO_DEATH: timeToDeath,
-    SHOW_PER_COUNTRY: showPerCountry,
-  } = filters
 
   const handleCountrySelectChange = (_event, value) => {
-    setCountryFilter(value)
-  }
-
-  const handleToggleShowPerCountry = event => {
-    toggleShowPerCountry(event.target.checked)
-  }
-
-  const handleChangeDeathRate = (_event, value) => {
-    setDeathRate(value)
-  }
-  const handleChangeTimeToDeath = (_event, value) => {
-    setTimeToDeath(value)
+    change('countryFilter', value)
+    return value
   }
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form>
       <Grid container spacing={4} className={classes.container}>
-        <Grid item md={8} lg={9}>
+        <Grid item xs={12} sm={6} md={8} lg={9}>
           <Autocomplete
+            name="countryFilter"
             multiple
             id="tags-outlined"
             options={countries}
             getOptionLabel={option => option}
-            value={countryFilter}
             filterSelectedOptions
+            value={countryFilter || []}
             onChange={handleCountrySelectChange}
             renderInput={params => (
               <TextField
@@ -132,59 +101,73 @@ const FilterForm = props => {
               name="showPerCountry"
               component={renderCheckbox}
               label="Combine states / provinces"
-              onChange={e => handleToggleShowPerCountry(e)}
-              value={showPerCountry}
             />
           </div>
         </Grid>
-        <Grid item md={4} lg={2}>
-          <div>
-            <Field
-              fullWidth
-              name="deathRate"
-              component={renderTextField}
-              label="Death rate"
-              onChange={handleChangeDeathRate}
-              value={deathRate}
-              type="number"
-              inputProps={{
-                min: '0.001',
-                max: '0.999',
-                step: '0.001',
-              }}
-            />
-          </div>
-        </Grid>
-        <Grid item md={4} lg={2}>
-          <div>
-            <Field
-              fullWidth
-              name="timeToDeath"
-              component={renderTextField}
-              label="Days until death"
-              onChange={handleChangeTimeToDeath}
-              value={timeToDeath}
-              type="number"
-            />
-          </div>
+        <Grid item xs={12}>
+          <Grid container spacing={4}>
+            <Grid item xs={12} sm={6} md={4} lg={2}>
+              <div>
+                <Field
+                  fullWidth
+                  name="deathRate"
+                  component={renderTextField}
+                  label="Death rate"
+                  type="number"
+                  inputProps={{
+                    min: '0.001',
+                    max: '0.999',
+                    step: '0.001',
+                  }}
+                />
+              </div>
+            </Grid>
+            <Grid item xs={12} sm={6} md={4} lg={2}>
+              <div>
+                <Field
+                  fullWidth
+                  name="timeToDeath"
+                  component={renderTextField}
+                  label="Days until death"
+                  type="number"
+                />
+              </div>
+            </Grid>
+            <Grid item xs={12} sm={6} md={4} lg={2}>
+              <div>
+                <Field
+                  name="showEstimates"
+                  component={renderCheckbox}
+                  label="Show estimates based on deaths"
+                />
+              </div>
+            </Grid>
+          </Grid>
         </Grid>
       </Grid>
     </form>
   )
 }
 
+const selector = formValueSelector('FilterForm')
 export default compose(
-  connect(state => ({}), {
-    setCountryFilter,
-    setDeathRate,
-    setTimeToDeath,
-    toggleShowPerCountry,
-  }),
+  connect(
+    state => {
+      return {
+        countryFilter: selector(state, 'countryFilter'),
+      }
+    },
+    {
+      change,
+    },
+  ),
   reduxForm({
     form: 'FilterForm', // a unique identifier for this form
     initialValues: {
+      countryFilter: [],
       deathRate: 0.014,
       timeToDeath: 17,
+      showEstimates: false,
       showPerCountry: true,
     },
   }),
