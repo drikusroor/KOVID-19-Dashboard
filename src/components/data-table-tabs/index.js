@@ -56,7 +56,7 @@ export default function DataTableTabs({ datasets, filters }) {
 
   return (
     <div className={classes.root}>
-      <AppBar position="static">
+      <AppBar position="static" color="secondary">
         <Tabs
           value={value}
           onChange={handleChange}

@@ -1,65 +1,35 @@
-import React, { useEffect, useState } from 'react'
-import { Container, Typography } from '@material-ui/core'
-import Box from '@material-ui/core/Box'
-import Link from '@material-ui/core/Link'
-import DataTableTabs from './components/data-table-tabs'
-import { connect } from 'react-redux'
-import { fetchTimeSeries } from './store/time-series/actions'
+import React from 'react'
 import {
-  getFilteredTimeSeries,
-  getCountries,
-} from './store/time-series/selectors'
-import FilterForm from './components/filter-form'
+  Switch,
+  Route,
+  BrowserRouter as Router,
+  Redirect,
+} from 'react-router-dom'
+import ChartPage from './pages/chart-page'
+import About from './pages/about'
 
-function Copyright() {
+function App() {
   return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      <br />
-      {'Copyright © '}
-      <Link color="inherit" href="https://material-ui.com/">
-        Koko Koding
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
+    <Router>
+      <Switch>
+        <Route path="/dashboard/:type/:country">
+          <ChartPage />
+        </Route>
+        <Route path="/dashboard/:type">
+          <ChartPage />
+        </Route>
+        <Route path="/dashboard">
+          <ChartPage />
+        </Route>
+        <Route path="/about">
+          <About />
+        </Route>
+        <Route path="/">
+          <Redirect to="/dashboard" />
+        </Route>
+      </Switch>
+    </Router>
   )
 }
 
-function App({ countries, filters, fetchTimeSeries, timeSeries }) {
-  useEffect(() => {
-    fetchTimeSeries()
-  }, [])
-
-  return (
-    <Container maxWidth="xl">
-      <Box my={4}>
-        <Typography variant="h4" component="h1" gutterBottom>
-          COVID-19 histogram per country
-        </Typography>
-        {timeSeries && timeSeries[0] && timeSeries[0].headers ? (
-          <FilterForm
-            countries={countries}
-            timeSeries={timeSeries}
-            filters={filters}
-          />
-        ) : null}
-
-        <DataTableTabs datasets={timeSeries} filters={filters} />
-        <Copyright />
-      </Box>
-    </Container>
-  )
-}
-
-export default connect(
-  state => {
-    return {
-      countries: getCountries(state),
-      filters: state.filters,
-      timeSeries: getFilteredTimeSeries(state),
-    }
-  },
-  {
-    fetchTimeSeries,
-  },
-)(App)
+export default App
