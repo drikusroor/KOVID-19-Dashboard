@@ -11,7 +11,7 @@ export const estimateConfirmedRow = (
   const { deathRate, timeToDeath } = filters
 
   let eData = dData.map((column, index) => {
-    return column / deathRate || (column === 0 ? 0 : undefined)
+    return Math.round(column / deathRate) || (column === 0 ? 0 : undefined)
   })
 
   eData = eData.slice(timeToDeath, eData.length)
