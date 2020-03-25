@@ -7,7 +7,8 @@ import Checkbox from '@material-ui/core/Checkbox'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Autocomplete from '@material-ui/lab/Autocomplete'
 import TextField from '@material-ui/core/TextField'
-import { Grid, Slider, Tooltip, Paper, Box } from '@material-ui/core'
+import { Grid, Slider, Tooltip, Box } from '@material-ui/core'
+import { getHeaders, getDates } from '../../store/time-series/selectors'
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -68,7 +69,7 @@ const renderTextField = ({
 )
 
 function ValueLabelComponent(props) {
-  const { children, open, value } = props
+  const { children, open, value = 'No value' } = props
 
   return (
     <Tooltip open={open} enterTouchDelay={0} placement="top" title={value}>
@@ -77,13 +78,35 @@ function ValueLabelComponent(props) {
   )
 }
 
+const renderSlider = ({
+  label,
+  input,
+  meta: { touched, invalid, error },
+  ...custom
+}) => {
+  console.log({ input })
+
+  return (
+    <Slider
+      aria-labelledby="discrete-slider-custom"
+      valueLabelDisplay="on"
+      steps={null}
+      marks={custom.marks}
+      getAriaLabel={custom.valuetext}
+      getAriaValueText={custom.valuetext}
+      min={0}
+      max={custom.dates.length - 1}
+      valueLabelFormat={custom.valuetext}
+      ValueLabelComponent={ValueLabelComponent}
+      value={input.value}
+      onChange={(e, value) => input.onChange(value)}
+    />
+  )
+}
+
 const FilterForm = props => {
-  const { change, countries, countryFilter, timeSeries } = props
+  const { change, countries, countryFilter, dates } = props
   const classes = useStyles()
-
-  const { headers = [] } = (timeSeries && timeSeries[0]) || { headers: [] }
-
-  const dates = headers.length > 4 ? headers.slice(4, headers.length) : []
 
   const marks = [
     { value: 0, label: dates[0] },
@@ -97,13 +120,8 @@ const FilterForm = props => {
     return value
   }
 
-  const handleDateRangeChange = (event, value) => {
-    change('dates', value)
-  }
-
   const valuetext = value => {
-    // return dates && dates.length > 0 ? dates[value] : 'No value'
-    return 'No value'
+    return dates && dates.length > 0 ? dates[value] : 'No value'
   }
 
   return (
@@ -141,8 +159,10 @@ const FilterForm = props => {
         <Grid item xs={12}>
           {SLIDER_ENABLED && marks && marks.length > 0 ? (
             <Box className={classes.slider}>
-              <Slider
-                onChange={handleDateRangeChange}
+              <Field
+                component={renderSlider}
+                name="dates"
+                dates={dates}
                 aria-labelledby="discrete-slider-custom"
                 valueLabelDisplay="on"
                 steps={null}
@@ -208,6 +228,8 @@ export default compose(
     state => {
       return {
         countryFilter: selector(state, 'countryFilter'),
+        headers: getHeaders(state),
+        dates: getDates(state),
       }
     },
     {
@@ -222,7 +244,7 @@ export default compose(
       timeToDeath: 17,
       showEstimates: false,
       showPerCountry: true,
-      dates: [],
+      dates: [0, 1],
     },
   }),
 )(FilterForm)

@@ -3,6 +3,14 @@ import { calculateEstimations } from './helpers/calculate-estimations'
 
 const getTimeSeries = state => state.timeSeries.data
 
+export const getHeaders = createSelector([getTimeSeries], timeSeries => {
+  return timeSeries && timeSeries[0] ? timeSeries[0].headers : null
+})
+
+export const getDates = createSelector([getHeaders], headers => {
+  return headers && headers.length > 4 ? headers.slice(4, headers.length) : []
+})
+
 export const getCountries = state => {
   const dataset = state.timeSeries.data && state.timeSeries.data[0]
   if (!dataset || !dataset.data || dataset.data.length < 1) return []

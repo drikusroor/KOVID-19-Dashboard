@@ -12,10 +12,6 @@ function* fetchTimeSeriesSaga(action) {
       }
     })
     yield put({
-      type: types.FILTERS_SET_DATE_RANGE,
-      payload: [0, datasets[0].headers.length - 1],
-    })
-    yield put({
       type: types.TIME_SERIES_FETCH_SUCCESS,
       payload: datasets,
     })
