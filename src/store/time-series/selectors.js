@@ -83,7 +83,7 @@ export const getTimeSeriesTotalPerPredicate = (rows, { predicate, key }) => {
             } else if (index < 4) {
               return ''
             } else {
-              return parseInt(col)
+              return parseInt(col || 0)
             }
           }),
         }
@@ -92,7 +92,7 @@ export const getTimeSeriesTotalPerPredicate = (rows, { predicate, key }) => {
           if (index < 4) {
             return exists[index]
           } else {
-            return parseInt(exists[index]) + parseInt(curr[index])
+            return parseInt(exists[index]) + parseInt(curr[index] || 0)
           }
         })
 
