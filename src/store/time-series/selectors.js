@@ -11,6 +11,10 @@ export const getDates = createSelector([getHeaders], headers => {
   return headers && headers.length > 4 ? headers.slice(4, headers.length) : []
 })
 
+export const getInitialDates = createSelector([getDates], dates => {
+  return [0, dates && dates > 0 ? dates.length - 1 : 1]
+})
+
 export const getCountries = state => {
   const dataset = state.timeSeries.data && state.timeSeries.data[0]
   if (!dataset || !dataset.data || dataset.data.length < 1) return []
@@ -134,27 +138,26 @@ export const getFilteredTimeSeries = createSelector(
       },
     )
 
-    // if (filters.DATE_RANGE) {
-    //   const { begin, end } = filters.DATE_RANGE
-    //   console.log({ begin, end })
-    //   datasets = datasets.map(dataset => {
-    //     let { headers, data } = dataset
-    //     headers = headers.slice(0, 4).concat(headers.slice(begin + 4, end + 4))
-    //     data = data.map(row => {
-    //       return row.slice(0, 4).concat(row.slice(begin + 4, end + 4))
-    //     })
-    //     return {
-    //       headers,
-    //       data,
-    //     }
-    //   })
-    // }
-
     const {
       FilterForm: {
-        values: { countryFilter, showEstimates, showPerCountry },
+        values: { countryFilter, dates, showEstimates, showPerCountry },
       },
     } = forms
+
+    if (dates) {
+      const [begin, end] = dates
+      datasets = datasets.map(dataset => {
+        let { headers, data } = dataset
+        headers = headers.slice(0, 4).concat(headers.slice(begin + 4, end + 4))
+        data = data.map(row => {
+          return row.slice(0, 4).concat(row.slice(begin + 4, end + 4))
+        })
+        return {
+          headers,
+          data,
+        }
+      })
+    }
 
     if (showPerCountry)
       datasets = modifyTimeSerieRows(datasets, getTimeSeriesPerCountry)

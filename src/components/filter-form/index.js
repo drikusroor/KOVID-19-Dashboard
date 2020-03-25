@@ -8,7 +8,11 @@ import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Autocomplete from '@material-ui/lab/Autocomplete'
 import TextField from '@material-ui/core/TextField'
 import { Grid, Slider, Tooltip, Box } from '@material-ui/core'
-import { getHeaders, getDates } from '../../store/time-series/selectors'
+import {
+  getHeaders,
+  getDates,
+  getInitialDates,
+} from '../../store/time-series/selectors'
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -84,8 +88,6 @@ const renderSlider = ({
   meta: { touched, invalid, error },
   ...custom
 }) => {
-  console.log({ input })
-
   return (
     <Slider
       aria-labelledby="discrete-slider-custom"
@@ -230,6 +232,14 @@ export default compose(
         countryFilter: selector(state, 'countryFilter'),
         headers: getHeaders(state),
         dates: getDates(state),
+        initialValues: {
+          countryFilter: [],
+          deathRate: 0.014,
+          timeToDeath: 17,
+          showEstimates: false,
+          showPerCountry: true,
+          dates: getInitialDates(state),
+        },
       }
     },
     {
@@ -238,13 +248,5 @@ export default compose(
   ),
   reduxForm({
     form: 'FilterForm', // a unique identifier for this form
-    initialValues: {
-      countryFilter: [],
-      deathRate: 0.014,
-      timeToDeath: 17,
-      showEstimates: false,
-      showPerCountry: true,
-      dates: [0, 1],
-    },
   }),
 )(FilterForm)
