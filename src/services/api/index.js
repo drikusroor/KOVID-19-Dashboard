@@ -2,17 +2,17 @@ import http from '../http'
 
 const fetchConfirmed = async () =>
   http(
-    '/COVID-19/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Confirmed.csv',
+    '/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Confirmed.csv',
   )
 
 const fetchDeaths = async () =>
   http(
-    '/COVID-19/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Deaths.csv',
+    '/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Deaths.csv',
   )
 
 const fetchRecovered = async () =>
   http(
-    '/COVID-19/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Recovered.csv',
+    '/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Recovered.csv',
   )
 
 export async function fetchTimeSeries() {
