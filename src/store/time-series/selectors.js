@@ -129,15 +129,6 @@ export const getFilteredTimeSeries = createSelector(
   (datasets, forms) => {
     if (!datasets) return null
 
-    const total = modifyTimeSerieRows(
-      datasets,
-      getTimeSeriesTotalPerPredicate,
-      {
-        predicate: _row => true,
-        key: 'Total',
-      },
-    )
-
     const {
       FilterForm: {
         values: { countryFilter, dates, showEstimates, showPerCountry },
@@ -158,6 +149,15 @@ export const getFilteredTimeSeries = createSelector(
         }
       })
     }
+
+    const total = modifyTimeSerieRows(
+      datasets,
+      getTimeSeriesTotalPerPredicate,
+      {
+        predicate: _row => true,
+        key: 'Total',
+      },
+    )
 
     if (showPerCountry)
       datasets = modifyTimeSerieRows(datasets, getTimeSeriesPerCountry)
