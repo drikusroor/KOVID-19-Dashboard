@@ -148,9 +148,9 @@ export const getFilteredTimeSeries = createSelector(
       const [begin, end] = dates
       datasets = datasets.map(dataset => {
         let { headers, data } = dataset
-        headers = headers.slice(0, 4).concat(headers.slice(begin + 4, end + 4))
+        headers = headers.slice(0, 4).concat(headers.slice(begin + 4, end + 5))
         data = data.map(row => {
-          return row.slice(0, 4).concat(row.slice(begin + 4, end + 4))
+          return row.slice(0, 4).concat(row.slice(begin + 4, end + 5))
         })
         return {
           headers,
