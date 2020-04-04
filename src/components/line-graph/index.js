@@ -2,11 +2,33 @@ import React, { useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import { Line } from 'react-chartjs-2'
 import _ from 'lodash'
-import { Paper, Button } from '@material-ui/core'
+import { Button, Paper } from '@material-ui/core'
+import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab'
+import {
+  CHART_TYPES,
+  setGrowthNumber,
+  setLinear,
+  setLogarithmic,
+} from '../../store/chart/actions'
+import { connect } from 'react-redux'
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     padding: theme.spacing(),
+  },
+}))
+
+const buttonStyles = makeStyles((theme) => ({
+  root: {
+    '&:hover': {
+      backgroundColor: `${theme.palette.secondary.dark} !important`,
+    },
+  },
+  selected: {
+    backgroundColor: `${theme.palette.secondary.dark} !important`,
+  },
+  label: {
+    color: '#fff',
   },
 }))
 
@@ -21,12 +43,20 @@ const colors = [
   '#ffa600',
 ]
 
-export default function LineGraph({ dataset, filters: { showPerCountry } }) {
+export function PureLineGraph({
+  chart,
+  dataset,
+  filters: { showPerCountry },
+  setGrowthNumber,
+  setLinear,
+  setLogarithmic,
+}) {
   const classes = useStyles()
+  const buttonClasses = buttonStyles()
 
   const { headers, data: rows } = dataset
 
-  const [logarithmic, setLogarithmic] = useState(false)
+  const logarithmic = chart.type === CHART_TYPES.LOGARITHMIC
 
   const labels = headers.slice(4, headers.length)
   const topRows = rows.slice(0, rows.length > 8 ? 8 : rows.length)
@@ -37,7 +67,7 @@ export default function LineGraph({ dataset, filters: { showPerCountry } }) {
         ? row[1]
         : `${row[0] ? row[0] + ', ' : ''}${row[1]}`,
       type: 'line',
-      data: row.slice(4, row.length).map(value => parseInt(value)),
+      data: row.slice(4, row.length).map((value) => parseInt(value)),
       borderColor: colors[index],
     }
   })
@@ -58,14 +88,62 @@ export default function LineGraph({ dataset, filters: { showPerCountry } }) {
 
   return (
     <Paper className={classes.root}>
-      <Button
-        onClick={() => setLogarithmic(!logarithmic)}
-        variant="contained"
-        color="secondary"
-      >
-        Show {logarithmic ? 'linear' : 'logaritmic'}
-      </Button>
+      <ToggleButtonGroup variant="contained" color="secondary" size="small">
+        <ToggleButton
+          component={Button}
+          onClick={() => chart.type !== CHART_TYPES.LINEAR && setLinear()}
+          variant="contained"
+          color="secondary"
+          selected={chart.type === CHART_TYPES.LINEAR}
+          classes={buttonClasses}
+          disableRipple={chart.type === CHART_TYPES.LINEAR}
+          disableFocusRipple={chart.type === CHART_TYPES.LINEAR}
+        >
+          Show linear
+        </ToggleButton>
+        <ToggleButton
+          component={Button}
+          onClick={() =>
+            chart.type !== CHART_TYPES.LOGARITHMIC && setLogarithmic()
+          }
+          variant="contained"
+          color="secondary"
+          selected={chart.type === CHART_TYPES.LOGARITHMIC}
+          classes={buttonClasses}
+          disableRipple={chart.type === CHART_TYPES.LOGARITHMIC}
+          disableFocusRipple={chart.type === CHART_TYPES.LOGARITHMIC}
+        >
+          Show logarithmic
+        </ToggleButton>
+        <ToggleButton
+          component={Button}
+          onClick={() =>
+            chart.type !== CHART_TYPES.GROWTH_NUMBER && setGrowthNumber()
+          }
+          variant="contained"
+          color="secondary"
+          selected={chart.type === CHART_TYPES.GROWTH_NUMBER}
+          classes={buttonClasses}
+          disableRipple={chart.type === CHART_TYPES.GROWTH_NUMBER}
+          disableFocusRipple={chart.type === CHART_TYPES.GROWTH_NUMBER}
+        >
+          Show growth numbers
+        </ToggleButton>
+      </ToggleButtonGroup>
       <Line data={data} options={options} height={480} />
     </Paper>
   )
 }
+
+export default connect(
+  (state) => {
+    return {
+      chart: state.chart,
+    }
+  },
+  {
+    setGrowthNumber,
+    setLinear,
+    setLogarithmic,
+  },
+)(PureLineGraph)

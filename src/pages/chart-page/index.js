@@ -14,6 +14,7 @@ import { Grid } from '@material-ui/core'
 import Skeleton from '@material-ui/lab/Skeleton'
 
 const ChartPage = ({
+  chart,
   countries,
   initialFilters,
   filters,
@@ -59,10 +60,10 @@ const ChartPage = ({
             <Grid item sm="12">
               <Skeleton variant="rect" height={50} />
             </Grid>
-            <Grid item sm="2">
+            <Grid item sm="7">
               <Skeleton variant="rect" height={50} />
             </Grid>
-            <Grid item sm="10"></Grid>
+            <Grid item sm="6"></Grid>
             <Grid item sm="12">
               <Skeleton variant="rect" height={400} />
             </Grid>

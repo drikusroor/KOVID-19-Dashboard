@@ -1,7 +1,9 @@
-import timeSeries from './time-series/reducer'
+import chart from './chart/reducer'
 import { reducer as form } from 'redux-form'
+import timeSeries from './time-series/reducer'
 
 export default {
-  timeSeries,
+  chart,
   form,
+  timeSeries,
 }
