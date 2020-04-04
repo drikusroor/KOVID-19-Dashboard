@@ -13,6 +13,7 @@ import {
   getDates,
   getInitialDates,
 } from '../../store/time-series/selectors'
+import { getFilterFormValues } from '../../store/form/selectors'
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -94,11 +95,11 @@ const renderSlider = ({
       valueLabelDisplay="on"
       steps={null}
       marks={custom.marks}
-      getAriaLabel={custom.valuetext}
-      getAriaValueText={custom.valuetext}
+      getAriaLabel={custom.valueLabelFormat}
+      getAriaValueText={custom.valueLabelFormat}
       min={0}
       max={custom.dates.length - 1}
-      valueLabelFormat={custom.valuetext}
+      valueLabelFormat={custom.valueLabelFormat}
       ValueLabelComponent={ValueLabelComponent}
       value={input.value}
       onChange={(e, value) => input.onChange(value)}
@@ -107,7 +108,7 @@ const renderSlider = ({
 }
 
 const FilterForm = props => {
-  const { change, countries, countryFilter, dates } = props
+  const { change, countries, countryFilter, dates, filterFormValues } = props
   const classes = useStyles()
 
   const marks = [
@@ -181,34 +182,7 @@ const FilterForm = props => {
         </Grid>
         <Grid item xs={12}>
           <Grid container spacing={4}>
-            <Grid item xs={12} sm={6} md={4} lg={2}>
-              <div>
-                <Field
-                  fullWidth
-                  name="deathRate"
-                  component={renderTextField}
-                  label="Death rate"
-                  type="number"
-                  inputProps={{
-                    min: '0.001',
-                    max: '0.999',
-                    step: '0.001',
-                  }}
-                />
-              </div>
-            </Grid>
-            <Grid item xs={12} sm={6} md={4} lg={2}>
-              <div>
-                <Field
-                  fullWidth
-                  name="timeToDeath"
-                  component={renderTextField}
-                  label="Days until death"
-                  type="number"
-                />
-              </div>
-            </Grid>
-            <Grid item xs={12} sm={6} md={4} lg={2}>
+            <Grid item xs={12}>
               <div>
                 <Field
                   name="showEstimates"
@@ -217,6 +191,37 @@ const FilterForm = props => {
                 />
               </div>
             </Grid>
+            {filterFormValues.showEstimates ? (
+              <>
+                <Grid item xs={12} sm={6} md={4} lg={2}>
+                  <div>
+                    <Field
+                      fullWidth
+                      name="deathRate"
+                      component={renderTextField}
+                      label="Death rate"
+                      type="number"
+                      inputProps={{
+                        min: '0.001',
+                        max: '0.999',
+                        step: '0.001',
+                      }}
+                    />
+                  </div>
+                </Grid>
+                <Grid item xs={12} sm={6} md={4} lg={2}>
+                  <div>
+                    <Field
+                      fullWidth
+                      name="timeToDeath"
+                      component={renderTextField}
+                      label="Days until death"
+                      type="number"
+                    />
+                  </div>
+                </Grid>
+              </>
+            ) : null}
           </Grid>
         </Grid>
       </Grid>
@@ -240,6 +245,7 @@ export default compose(
           showPerCountry: true,
           dates: getInitialDates(state),
         },
+        filterFormValues: getFilterFormValues(state),
       }
     },
     {
