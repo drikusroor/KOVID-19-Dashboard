@@ -14,7 +14,15 @@ export const timeSeriesReducer = function(
     case types.TIME_SERIES_FETCH_SUCCESS:
       return {
         ...state,
+        loading: false,
         data: action.payload,
+      }
+    case types.TIME_SERIES_FETCH_ERROR:
+      return {
+        ...state,
+        loading: false,
+        message: action.payload,
+        data: initialState.timeSeries.data,
       }
     case types.TIME_SERIES_RESET_REDUCER:
       return initialState.timeSeries

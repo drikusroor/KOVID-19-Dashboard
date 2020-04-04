@@ -12,7 +12,7 @@ export const getDates = createSelector([getHeaders], headers => {
 })
 
 export const getInitialDates = createSelector([getDates], dates => {
-  return [0, dates && dates > 0 ? dates.length - 1 : 1]
+  return [0, dates && dates.length > 0 ? dates.length - 1 : 1]
 })
 
 export const getCountries = state => {
@@ -129,11 +129,9 @@ export const getFilteredTimeSeries = createSelector(
   (datasets, forms) => {
     if (!datasets) return null
 
-    const {
-      FilterForm: {
-        values: { countryFilter, dates, showEstimates, showPerCountry },
-      },
-    } = forms
+    const { FilterForm } = forms
+    const { values } = FilterForm || {}
+    const { countryFilter, dates, showEstimates, showPerCountry } = values || {}
 
     if (dates) {
       const [begin, end] = dates

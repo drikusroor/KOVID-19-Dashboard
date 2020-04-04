@@ -16,6 +16,7 @@ const ChartPage = ({
   initialFilters,
   filters,
   fetchTimeSeries,
+  loading,
   timeSeries,
 }) => {
   const { type } = useParams()
@@ -25,12 +26,16 @@ const ChartPage = ({
 
   return (
     <Layout title="COVID-19 histogram per country">
-      <FilterForm
-        initialFilters={initialFilters}
-        countries={countries}
-        filters={filters}
-      />
-      <DataTableTabs datasets={timeSeries} filters={filters} />
+      {timeSeries && !loading ? (
+        <>
+          <FilterForm
+            initialFilters={initialFilters}
+            countries={countries}
+            filters={filters}
+          />
+          <DataTableTabs datasets={timeSeries} filters={filters} />
+        </>
+      ) : null}
     </Layout>
   )
 }
@@ -40,6 +45,7 @@ export default connect(
     return {
       countries: getCountries(state),
       filters: getFilterFormValues(state),
+      loading: state.timeSeries.loading,
       timeSeries: getFilteredTimeSeries(state),
     }
   },

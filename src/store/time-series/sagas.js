@@ -16,7 +16,8 @@ function* fetchTimeSeriesSaga(action) {
       payload: datasets,
     })
   } catch (e) {
-    yield put({ type: 'TIME_SERIES_FETCH_ERROR', message: e.message })
+    console.log({ e })
+    yield put({ type: types.TIME_SERIES_FETCH_ERROR, payload: e.message })
   }
 }
 

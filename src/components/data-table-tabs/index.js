@@ -67,7 +67,7 @@ export default function DataTableTabs({ datasets, filters }) {
           <Tab label="Recovered" {...a11yProps(2)} />
         </Tabs>
       </AppBar>
-      {datasets ? (
+      {datasets && filters ? (
         <>
           <TabPanel value={value} index={0}>
             <LineGraph dataset={datasets[0]} filters={filters} />
