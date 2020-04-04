@@ -122,12 +122,13 @@ export function PureLineGraph({
           }
           variant="contained"
           color="secondary"
+          disabled
           selected={chart.type === CHART_TYPES.GROWTH_NUMBER}
           classes={buttonClasses}
           disableRipple={chart.type === CHART_TYPES.GROWTH_NUMBER}
           disableFocusRipple={chart.type === CHART_TYPES.GROWTH_NUMBER}
         >
-          Show growth numbers
+          Show growth numbers (to be implemented)
         </ToggleButton>
       </ToggleButtonGroup>
       <Line data={data} options={options} height={480} />
