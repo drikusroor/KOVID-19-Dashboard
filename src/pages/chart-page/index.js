@@ -41,10 +41,10 @@ const ChartPage = ({
         <>
           <Grid container spacing={2}>
             {/* FILTER FORM */}
-            <Grid item sm="6">
+            <Grid item xs={12} sm={6} md={8} lg={9}>
               <Skeleton variant="rect" height={60} />
             </Grid>
-            <Grid item sm="6">
+            <Grid item md={4} lg={3}>
               <Skeleton variant="rect" height={60} />
             </Grid>
             <Grid item sm="12">
@@ -74,7 +74,7 @@ const ChartPage = ({
 }
 
 export default connect(
-  state => {
+  (state) => {
     return {
       countries: getCountries(state),
       filters: getFilterFormValues(state),
