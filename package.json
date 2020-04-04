@@ -31,11 +31,6 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "yarn && yarn build"
-    }
-  },
   "eslintConfig": {
     "extends": "react-app"
   },
