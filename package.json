@@ -47,6 +47,7 @@
     ]
   },
   "devDependencies": {
+    "ftp": "^0.3.10",
     "husky": "^4.2.3"
   }
 }
