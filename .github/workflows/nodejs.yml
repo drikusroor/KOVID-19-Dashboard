@@ -22,9 +22,6 @@ jobs:
     - uses: Borales/actions-yarn@v2.1.0
       with:
         cmd: build
-    - uses: Borales/actions-yarn@v2.1.0
-      with:
-        cmd: test
     - name: FTP Deploy
       uses: SamKirkland/FTP-Deploy-Action@3.0.0
       with:
