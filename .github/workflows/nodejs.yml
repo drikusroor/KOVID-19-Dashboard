@@ -28,6 +28,6 @@ jobs:
         ftp-server: sftp.kokokoding.nl/domains/kokokoding.nl/public_html/kovid-19
         ftp-username: ${{ secrets.FtpUser }}
         ftp-password: ${{ secrets.FtpPassword }}
-        local-dir: /build
+        local-dir: build
       env:
         CI: true
