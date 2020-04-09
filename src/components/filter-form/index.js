@@ -7,7 +7,7 @@ import Checkbox from '@material-ui/core/Checkbox'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Autocomplete from '@material-ui/lab/Autocomplete'
 import TextField from '@material-ui/core/TextField'
-import { Grid, Slider, Tooltip, Box } from '@material-ui/core'
+import { Button, Grid, Slider, Tooltip, Box } from '@material-ui/core'
 import {
   getHeaders,
   getDates,
@@ -15,7 +15,7 @@ import {
 } from '../../store/time-series/selectors'
 import { getFilterFormValues } from '../../store/form/selectors'
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   container: {
     marginBottom: theme.spacing(0.5),
   },
@@ -39,7 +39,7 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-const renderCheckbox = props => {
+const renderCheckbox = (props) => {
   const { input, label } = props
 
   return (
@@ -107,7 +107,7 @@ const renderSlider = ({
   )
 }
 
-const FilterForm = props => {
+const FilterForm = (props) => {
   const { change, countries, countryFilter, dates, filterFormValues } = props
   const classes = useStyles()
 
@@ -123,7 +123,15 @@ const FilterForm = props => {
     return value
   }
 
-  const valuetext = value => {
+  const handlePastTwoWeeks = () => {
+    change('dates', [dates.length - 15, dates.length - 1])
+  }
+
+  const resetDates = () => {
+    change('dates', [0, dates.length - 1])
+  }
+
+  const valuetext = (value) => {
     return dates && dates.length > 0 ? dates[value] : 'No value'
   }
 
@@ -136,11 +144,11 @@ const FilterForm = props => {
             multiple
             id="tags-outlined"
             options={countries}
-            getOptionLabel={option => option}
+            getOptionLabel={(option) => option}
             filterSelectedOptions
             value={countryFilter || []}
             onChange={handleCountrySelectChange}
-            renderInput={params => (
+            renderInput={(params) => (
               <TextField
                 {...params}
                 variant="outlined"
@@ -159,7 +167,7 @@ const FilterForm = props => {
             />
           </div>
         </Grid>
-        <Grid item xs={12}>
+        <Grid item xs={12} md={8}>
           {SLIDER_ENABLED && marks && marks.length > 0 ? (
             <Box className={classes.slider}>
               <Field
@@ -179,6 +187,12 @@ const FilterForm = props => {
               />
             </Box>
           ) : null}
+        </Grid>
+        <Grid item md={2}>
+          <Button onClick={handlePastTwoWeeks}>Past 2 weeks</Button>
+        </Grid>
+        <Grid item md={2}>
+          <Button onClick={resetDates}>Reset</Button>
         </Grid>
         <Grid item xs={12}>
           <Grid container spacing={4}>
@@ -232,7 +246,7 @@ const FilterForm = props => {
 const selector = formValueSelector('FilterForm')
 export default compose(
   connect(
-    state => {
+    (state) => {
       return {
         countryFilter: selector(state, 'countryFilter'),
         headers: getHeaders(state),

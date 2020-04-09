@@ -48,9 +48,16 @@ const ChartPage = ({
             <Grid item md={4} lg={3}>
               <Skeleton variant="rect" height={60} />
             </Grid>
-            <Grid item sm="12">
+            <Grid item xs="12" md="8">
               <Skeleton variant="rect" height={60} />
             </Grid>
+            <Grid item sm="2" md="2">
+              <Skeleton variant="rect" height={60} />
+            </Grid>
+            <Grid item sm="2" md="2">
+              <Skeleton variant="rect" height={60} />
+            </Grid>
+            <Grid item sm="8" md="12"></Grid>
             <Grid item sm="4">
               <Skeleton variant="rect" height={60} />
             </Grid>
