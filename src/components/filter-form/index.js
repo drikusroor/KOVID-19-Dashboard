@@ -7,7 +7,16 @@ import Checkbox from '@material-ui/core/Checkbox'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Autocomplete from '@material-ui/lab/Autocomplete'
 import TextField from '@material-ui/core/TextField'
-import { Button, Grid, Slider, Tooltip, Box } from '@material-ui/core'
+import Clear from '@material-ui/icons/Clear'
+import {
+  Button,
+  Grid,
+  Slider,
+  Tooltip,
+  Box,
+  IconButton,
+  Icon,
+} from '@material-ui/core'
 import {
   getHeaders,
   getDates,
@@ -137,7 +146,12 @@ const FilterForm = (props) => {
 
   return (
     <form>
-      <Grid container spacing={4} className={classes.container}>
+      <Grid
+        container
+        spacing={4}
+        className={classes.container}
+        alignItems="center"
+      >
         <Grid item xs={12} sm={6} md={8} lg={9}>
           <Autocomplete
             name="countryFilter"
@@ -167,7 +181,7 @@ const FilterForm = (props) => {
             />
           </div>
         </Grid>
-        <Grid item xs={12} md={8}>
+        <Grid item xs={12} md={9}>
           {SLIDER_ENABLED && marks && marks.length > 0 ? (
             <Box className={classes.slider}>
               <Field
@@ -188,11 +202,15 @@ const FilterForm = (props) => {
             </Box>
           ) : null}
         </Grid>
-        <Grid item md={2}>
-          <Button onClick={handlePastTwoWeeks}>Past 2 weeks</Button>
+        <Grid item>
+          <Button variant="outlined" onClick={handlePastTwoWeeks}>
+            Past 2 weeks
+          </Button>
         </Grid>
-        <Grid item md={2}>
-          <Button onClick={resetDates}>Reset</Button>
+        <Grid item>
+          <IconButton onClick={resetDates}>
+            <Clear />
+          </IconButton>
         </Grid>
         <Grid item xs={12}>
           <Grid container spacing={4}>
