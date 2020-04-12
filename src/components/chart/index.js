@@ -2,14 +2,15 @@ import React, { useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import { Line } from 'react-chartjs-2'
 import _ from 'lodash'
-import { Button, Paper } from '@material-ui/core'
+import { Button, Paper, Grid } from '@material-ui/core'
 import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab'
 import {
+  AGG_TYPES,
   CHART_TYPES,
-  setGrowthNumber,
-  setGrowthPercentage,
-  setLinear,
-  setLogarithmic,
+  setAggType,
+  setChartType,
+  setScaleType,
+  SCALE_TYPES,
 } from '../../store/chart/actions'
 import { connect } from 'react-redux'
 
@@ -48,17 +49,17 @@ export function PureChart({
   chart,
   dataset,
   filters: { showPerCountry },
-  setGrowthNumber,
-  setGrowthPercentage,
-  setLinear,
-  setLogarithmic,
+  setAggType,
+  setChartType,
+  setScaleType,
 }) {
   const classes = useStyles()
   const buttonClasses = buttonStyles()
 
   const { headers, data: rows } = dataset
 
-  const logarithmic = chart.type === CHART_TYPES.LOGARITHMIC
+  const logarithmic = chart.scaleType === SCALE_TYPES.LOGARITHMIC
+  const line = chart.chartType === CHART_TYPES.LINE
 
   const labels = headers.slice(4, headers.length)
   const topRows = rows.slice(0, rows.length > 8 ? 8 : rows.length)
@@ -68,7 +69,7 @@ export function PureChart({
       label: showPerCountry
         ? row[1]
         : `${row[0] ? row[0] + ', ' : ''}${row[1]}`,
-      type: 'line',
+      type: line ? 'line' : 'bar',
       data: row.slice(4, row.length).map((value) => parseInt(value)),
       borderColor: colors[index],
     }
@@ -90,63 +91,126 @@ export function PureChart({
 
   return (
     <Paper className={classes.root}>
-      <ToggleButtonGroup variant="contained" color="secondary" size="small">
-        <ToggleButton
-          component={Button}
-          onClick={() => chart.type !== CHART_TYPES.LINEAR && setLinear()}
-          variant="contained"
-          color="secondary"
-          selected={chart.type === CHART_TYPES.LINEAR}
-          classes={buttonClasses}
-          disableRipple={chart.type === CHART_TYPES.LINEAR}
-          disableFocusRipple={chart.type === CHART_TYPES.LINEAR}
-        >
-          Linear
-        </ToggleButton>
-        <ToggleButton
-          component={Button}
-          onClick={() =>
-            chart.type !== CHART_TYPES.LOGARITHMIC && setLogarithmic()
-          }
-          variant="contained"
-          color="secondary"
-          selected={chart.type === CHART_TYPES.LOGARITHMIC}
-          classes={buttonClasses}
-          disableRipple={chart.type === CHART_TYPES.LOGARITHMIC}
-          disableFocusRipple={chart.type === CHART_TYPES.LOGARITHMIC}
-        >
-          Logarithmic
-        </ToggleButton>
-        <ToggleButton
-          component={Button}
-          onClick={() =>
-            chart.type !== CHART_TYPES.GROWTH_NUMBER && setGrowthNumber()
-          }
-          variant="contained"
-          color="secondary"
-          selected={chart.type === CHART_TYPES.GROWTH_NUMBER}
-          classes={buttonClasses}
-          disableRipple={chart.type === CHART_TYPES.GROWTH_NUMBER}
-          disableFocusRipple={chart.type === CHART_TYPES.GROWTH_NUMBER}
-        >
-          DoD Growth
-        </ToggleButton>
-        <ToggleButton
-          component={Button}
-          onClick={() =>
-            chart.type !== CHART_TYPES.GROWTH_PERCENTAGE &&
-            setGrowthPercentage()
-          }
-          variant="contained"
-          color="secondary"
-          selected={chart.type === CHART_TYPES.GROWTH_PERCENTAGE}
-          classes={buttonClasses}
-          disableRipple={chart.type === CHART_TYPES.GROWTH_PERCENTAGE}
-          disableFocusRipple={chart.type === CHART_TYPES.GROWTH_PERCENTAGE}
-        >
-          DoD Growth (%)
-        </ToggleButton>
-      </ToggleButtonGroup>
+      <Grid container spacing={1}>
+        <Grid item>
+          <ToggleButtonGroup variant="contained" color="secondary" size="small">
+            <ToggleButton
+              component={Button}
+              onClick={() =>
+                chart.aggType !== AGG_TYPES.ACCUMULATIVE &&
+                setAggType(AGG_TYPES.ACCUMULATIVE)
+              }
+              variant="contained"
+              color="secondary"
+              selected={chart.aggType === AGG_TYPES.ACCUMULATIVE}
+              classes={buttonClasses}
+              disableRipple={chart.aggType === AGG_TYPES.ACCUMULATIVE}
+              disableFocusRipple={chart.aggType === AGG_TYPES.ACCUMULATIVE}
+            >
+              Accumulative
+            </ToggleButton>
+            <ToggleButton
+              component={Button}
+              onClick={() =>
+                chart.type !== AGG_TYPES.GROWTH_NUMBER &&
+                setAggType(AGG_TYPES.GROWTH_NUMBER)
+              }
+              variant="contained"
+              color="secondary"
+              selected={chart.aggType === AGG_TYPES.GROWTH_NUMBER}
+              classes={buttonClasses}
+              disableRipple={chart.aggType === AGG_TYPES.GROWTH_NUMBER}
+              disableFocusRipple={chart.aggType === AGG_TYPES.GROWTH_NUMBER}
+            >
+              DoD Growth
+            </ToggleButton>
+            <ToggleButton
+              component={Button}
+              onClick={() =>
+                chart.aggType !== AGG_TYPES.GROWTH_PERCENTAGE &&
+                setAggType(AGG_TYPES.GROWTH_PERCENTAGE)
+              }
+              variant="contained"
+              color="secondary"
+              selected={chart.aggType === AGG_TYPES.GROWTH_PERCENTAGE}
+              classes={buttonClasses}
+              disableRipple={chart.aggType === AGG_TYPES.GROWTH_PERCENTAGE}
+              disableFocusRipple={chart.aggType === AGG_TYPES.GROWTH_PERCENTAGE}
+            >
+              DoD Growth
+            </ToggleButton>
+          </ToggleButtonGroup>
+        </Grid>
+        <Grid item>
+          <ToggleButtonGroup variant="contained" color="secondary" size="small">
+            <ToggleButton
+              component={Button}
+              onClick={() =>
+                chart.scaleType !== SCALE_TYPES.LINEAR &&
+                setScaleType(SCALE_TYPES.LINEAR)
+              }
+              variant="contained"
+              color="secondary"
+              selected={chart.scaleType === SCALE_TYPES.LINEAR}
+              classes={buttonClasses}
+              disableRipple={chart.scaleType === SCALE_TYPES.LINEAR}
+              disableFocusRipple={chart.scaleType === SCALE_TYPES.LINEAR}
+            >
+              Linear
+            </ToggleButton>
+            <ToggleButton
+              component={Button}
+              onClick={() =>
+                chart.scaleType !== SCALE_TYPES.LOGARITHMIC &&
+                setScaleType(SCALE_TYPES.LOGARITHMIC)
+              }
+              variant="contained"
+              color="secondary"
+              selected={chart.scaleType === SCALE_TYPES.LOGARITHMIC}
+              classes={buttonClasses}
+              disableRipple={chart.scaleType === SCALE_TYPES.LOGARITHMIC}
+              disableFocusRipple={chart.scaleType === SCALE_TYPES.LOGARITHMIC}
+            >
+              Logarithmic
+            </ToggleButton>
+          </ToggleButtonGroup>
+        </Grid>
+        <Grid item>
+          <ToggleButtonGroup variant="contained" color="secondary" size="small">
+            <ToggleButton
+              component={Button}
+              onClick={() =>
+                chart.chartType !== CHART_TYPES.BAR &&
+                setChartType(CHART_TYPES.BAR)
+              }
+              variant="contained"
+              color="secondary"
+              selected={chart.chartType === CHART_TYPES.BAR}
+              classes={buttonClasses}
+              disableRipple={chart.chartType === CHART_TYPES.BAR}
+              disableFocusRipple={chart.chartType === CHART_TYPES.BAR}
+            >
+              Bar
+            </ToggleButton>
+            <ToggleButton
+              component={Button}
+              onClick={() =>
+                chart.chartType !== CHART_TYPES.LINE &&
+                setChartType(CHART_TYPES.LINE)
+              }
+              variant="contained"
+              color="secondary"
+              selected={chart.chartType === CHART_TYPES.LINE}
+              classes={buttonClasses}
+              disableRipple={chart.chartType === CHART_TYPES.LINE}
+              disableFocusRipple={chart.chartType === CHART_TYPES.LINE}
+            >
+              Line
+            </ToggleButton>
+          </ToggleButtonGroup>
+        </Grid>
+      </Grid>
+
       <Line data={data} options={options} height={480} />
     </Paper>
   )
@@ -159,9 +223,8 @@ export default connect(
     }
   },
   {
-    setGrowthNumber,
-    setGrowthPercentage,
-    setLinear,
-    setLogarithmic,
+    setAggType,
+    setChartType,
+    setScaleType,
   },
 )(PureChart)

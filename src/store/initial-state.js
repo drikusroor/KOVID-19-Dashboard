@@ -1,8 +1,10 @@
-import { CHART_TYPES } from './chart/actions'
+import { AGG_TYPES, CHART_TYPES, SCALE_TYPES } from './chart/actions'
 
 export const initialState = {
   chart: {
-    type: CHART_TYPES.LINEAR,
+    aggType: AGG_TYPES.ACCUMULATIVE,
+    chartType: CHART_TYPES.BAR,
+    scaleType: SCALE_TYPES.LINEAR,
   },
   timeSeries: {
     data: null,

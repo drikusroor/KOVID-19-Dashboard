@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect'
 import { calculateEstimations } from './helpers/calculate-estimations'
-import { CHART_TYPES } from '../chart/actions'
+import { AGG_TYPES } from '../chart/actions'
 
 const getTimeSeries = (state) => state.timeSeries.data
 const getChart = (state) => state.chart
@@ -165,7 +165,7 @@ export const getFilteredTimeSeries = createSelector(
     const { FilterForm } = forms
     const { values } = FilterForm || {}
     const { countryFilter, dates, showEstimates, showPerCountry } = values || {}
-    const { type } = chart
+    const { aggType } = chart
 
     if (dates) {
       const [begin, end] = dates
@@ -240,9 +240,9 @@ export const getFilteredTimeSeries = createSelector(
       })
     }
 
-    if (type === CHART_TYPES.GROWTH_NUMBER) {
+    if (aggType === AGG_TYPES.GROWTH_NUMBER) {
       datasets = modifyTimeSerieRows(datasets, getGrowthNumbers)
-    } else if (type === CHART_TYPES.GROWTH_PERCENTAGE) {
+    } else if (aggType === AGG_TYPES.GROWTH_PERCENTAGE) {
       datasets = modifyTimeSerieRows(datasets, getGrowthPercentage)
     }
 

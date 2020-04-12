@@ -1,29 +1,33 @@
 import { createAction } from 'redux-actions'
 import types from '../types'
 
-export const CHART_TYPES = {
+export const AGG_TYPES = {
+  ACCUMULATIVE: 'ACCUMULATIVE',
   GROWTH_NUMBER: 'GROWTH_NUMBER',
   GROWTH_PERCENTAGE: 'GROWTH_PERCENTAGE',
+}
+
+export const CHART_TYPES = {
+  BAR: 'BAR',
+  LINE: 'LINE',
+}
+
+export const SCALE_TYPES = {
   LINEAR: 'LINEAR',
   LOGARITHMIC: 'LOGARITHMIC',
 }
 
-export const setGrowthNumber = createAction(
-  types.CHART_SET_TYPE,
-  () => CHART_TYPES.GROWTH_NUMBER,
+export const setAggType = createAction(
+  types.CHART_SET_AGG_TYPE,
+  (payload) => payload,
 )
 
-export const setGrowthPercentage = createAction(
-  types.CHART_SET_TYPE,
-  () => CHART_TYPES.GROWTH_PERCENTAGE,
+export const setChartType = createAction(
+  types.CHART_SET_CHART_TYPE,
+  (payload) => payload,
 )
 
-export const setLinear = createAction(
-  types.CHART_SET_TYPE,
-  () => CHART_TYPES.LINEAR,
-)
-
-export const setLogarithmic = createAction(
-  types.CHART_SET_TYPE,
-  () => CHART_TYPES.LOGARITHMIC,
+export const setScaleType = createAction(
+  types.CHART_SET_SCALE_TYPE,
+  (payload) => payload,
 )
