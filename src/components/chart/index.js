@@ -43,7 +43,7 @@ const colors = [
   '#ffa600',
 ]
 
-export function PureLineGraph({
+export function PureChart({
   chart,
   dataset,
   filters: { showPerCountry },
@@ -122,13 +122,12 @@ export function PureLineGraph({
           }
           variant="contained"
           color="secondary"
-          disabled
           selected={chart.type === CHART_TYPES.GROWTH_NUMBER}
           classes={buttonClasses}
           disableRipple={chart.type === CHART_TYPES.GROWTH_NUMBER}
           disableFocusRipple={chart.type === CHART_TYPES.GROWTH_NUMBER}
         >
-          Show growth numbers (to be implemented)
+          Show growth numbers
         </ToggleButton>
       </ToggleButtonGroup>
       <Line data={data} options={options} height={480} />
@@ -147,4 +146,4 @@ export default connect(
     setLinear,
     setLogarithmic,
   },
-)(PureLineGraph)
+)(PureChart)

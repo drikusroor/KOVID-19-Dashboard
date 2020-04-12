@@ -1,21 +1,23 @@
 import { createSelector } from 'reselect'
 import { calculateEstimations } from './helpers/calculate-estimations'
+import { CHART_TYPES } from '../chart/actions'
 
-const getTimeSeries = state => state.timeSeries.data
+const getTimeSeries = (state) => state.timeSeries.data
+const getChart = (state) => state.chart
 
-export const getHeaders = createSelector([getTimeSeries], timeSeries => {
+export const getHeaders = createSelector([getTimeSeries], (timeSeries) => {
   return timeSeries && timeSeries[0] ? timeSeries[0].headers : null
 })
 
-export const getDates = createSelector([getHeaders], headers => {
+export const getDates = createSelector([getHeaders], (headers) => {
   return headers && headers.length > 4 ? headers.slice(4, headers.length) : []
 })
 
-export const getInitialDates = createSelector([getDates], dates => {
+export const getInitialDates = createSelector([getDates], (dates) => {
   return [0, dates && dates.length > 0 ? dates.length - 1 : 1]
 })
 
-export const getCountries = state => {
+export const getCountries = (state) => {
   const dataset = state.timeSeries.data && state.timeSeries.data[0]
   if (!dataset || !dataset.data || dataset.data.length < 1) return []
   const { data } = dataset
@@ -31,16 +33,16 @@ export const getCountries = state => {
   ).sort()
 }
 
-export const getForms = state => state.form || {}
+export const getForms = (state) => state.form || {}
 
 export const modifyTimeSerieRows = (datasets, modificationFn, params) => {
-  return datasets.map(dataset => {
+  return datasets.map((dataset) => {
     const { headers, data: rows } = dataset
     return { headers, data: [...modificationFn(rows, params)] }
   })
 }
 
-export const getTimeSeriesPerCountry = rows => {
+export const getTimeSeriesPerCountry = (rows) => {
   const rowsPerCountry = rows.reduce((acc, curr) => {
     const exists = acc[curr[1]]
 
@@ -75,12 +77,12 @@ export const getTimeSeriesPerCountry = rows => {
 
   return Object.keys(rowsPerCountry)
     .sort()
-    .map(key => rowsPerCountry[key])
+    .map((key) => rowsPerCountry[key])
 }
 
 export const getTimeSeriesTotalPerPredicate = (rows, { predicate, key }) => {
   const rowsPerCountry = rows
-    .filter(row => predicate(row))
+    .filter((row) => predicate(row))
     .reduce((acc, curr) => {
       const exists = acc[key]
 
@@ -117,28 +119,43 @@ export const getTimeSeriesTotalPerPredicate = (rows, { predicate, key }) => {
 
   return Object.keys(rowsPerCountry)
     .sort()
-    .map(key => rowsPerCountry[key])
+    .map((key) => rowsPerCountry[key])
 }
 
 export const getCountryFilteredTimeSeries = (rows, countryFilter = []) => {
-  return rows.filter(row => countryFilter.some(country => country === row[1]))
+  return rows.filter((row) =>
+    countryFilter.some((country) => country === row[1]),
+  )
+}
+
+export const getGrowthNumbers = (rows) => {
+  return rows.map((row) => {
+    return row.reduce((acc, curr, index, array) => {
+      if (index < 5) {
+        return [...acc, curr]
+      } else {
+        return [...acc, curr - array[index - 1]]
+      }
+    }, [])
+  })
 }
 
 export const getFilteredTimeSeries = createSelector(
-  [getTimeSeries, getForms],
-  (datasets, forms) => {
+  [getTimeSeries, getForms, getChart],
+  (datasets, forms, chart) => {
     if (!datasets) return null
 
     const { FilterForm } = forms
     const { values } = FilterForm || {}
     const { countryFilter, dates, showEstimates, showPerCountry } = values || {}
+    const { type } = chart
 
     if (dates) {
       const [begin, end] = dates
-      datasets = datasets.map(dataset => {
+      datasets = datasets.map((dataset) => {
         let { headers, data } = dataset
         headers = headers.slice(0, 4).concat(headers.slice(begin + 4, end + 5))
-        data = data.map(row => {
+        data = data.map((row) => {
           return row.slice(0, 4).concat(row.slice(begin + 4, end + 5))
         })
         return {
@@ -152,7 +169,7 @@ export const getFilteredTimeSeries = createSelector(
       datasets,
       getTimeSeriesTotalPerPredicate,
       {
-        predicate: _row => true,
+        predicate: (_row) => true,
         key: 'Total',
       },
     )
@@ -180,7 +197,7 @@ export const getFilteredTimeSeries = createSelector(
         datasets,
         getTimeSeriesTotalPerPredicate,
         {
-          predicate: row => row[1] === 'China',
+          predicate: (row) => row[1] === 'China',
           key: 'China',
         },
       )
@@ -188,7 +205,7 @@ export const getFilteredTimeSeries = createSelector(
         datasets,
         getTimeSeriesTotalPerPredicate,
         {
-          predicate: row => row[1] !== 'China',
+          predicate: (row) => row[1] !== 'China',
           key: 'Not China',
         },
       )
@@ -204,6 +221,10 @@ export const getFilteredTimeSeries = createSelector(
           ],
         }
       })
+    }
+
+    if (type === CHART_TYPES.GROWTH_NUMBER) {
+      datasets = modifyTimeSerieRows(datasets, getGrowthNumbers)
     }
 
     if (showEstimates) {
