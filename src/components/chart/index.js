@@ -74,6 +74,9 @@ export function PureChart({
       type: line ? 'line' : 'bar',
       data: row.slice(4, row.length).map((value) => parseInt(value)),
       borderColor: colors[index],
+      fillColor: colors[index],
+      strokeColor: colors[index],
+      borderWidth: 1,
     }
   })
 
