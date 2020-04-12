@@ -7,6 +7,7 @@ import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab'
 import {
   CHART_TYPES,
   setGrowthNumber,
+  setGrowthPercentage,
   setLinear,
   setLogarithmic,
 } from '../../store/chart/actions'
@@ -48,6 +49,7 @@ export function PureChart({
   dataset,
   filters: { showPerCountry },
   setGrowthNumber,
+  setGrowthPercentage,
   setLinear,
   setLogarithmic,
 }) {
@@ -99,7 +101,7 @@ export function PureChart({
           disableRipple={chart.type === CHART_TYPES.LINEAR}
           disableFocusRipple={chart.type === CHART_TYPES.LINEAR}
         >
-          Show linear
+          Linear
         </ToggleButton>
         <ToggleButton
           component={Button}
@@ -113,7 +115,7 @@ export function PureChart({
           disableRipple={chart.type === CHART_TYPES.LOGARITHMIC}
           disableFocusRipple={chart.type === CHART_TYPES.LOGARITHMIC}
         >
-          Show logarithmic
+          Logarithmic
         </ToggleButton>
         <ToggleButton
           component={Button}
@@ -127,7 +129,22 @@ export function PureChart({
           disableRipple={chart.type === CHART_TYPES.GROWTH_NUMBER}
           disableFocusRipple={chart.type === CHART_TYPES.GROWTH_NUMBER}
         >
-          Show growth numbers
+          DoD Growth
+        </ToggleButton>
+        <ToggleButton
+          component={Button}
+          onClick={() =>
+            chart.type !== CHART_TYPES.GROWTH_PERCENTAGE &&
+            setGrowthPercentage()
+          }
+          variant="contained"
+          color="secondary"
+          selected={chart.type === CHART_TYPES.GROWTH_PERCENTAGE}
+          classes={buttonClasses}
+          disableRipple={chart.type === CHART_TYPES.GROWTH_PERCENTAGE}
+          disableFocusRipple={chart.type === CHART_TYPES.GROWTH_PERCENTAGE}
+        >
+          DoD Growth (%)
         </ToggleButton>
       </ToggleButtonGroup>
       <Line data={data} options={options} height={480} />
@@ -143,6 +160,7 @@ export default connect(
   },
   {
     setGrowthNumber,
+    setGrowthPercentage,
     setLinear,
     setLogarithmic,
   },

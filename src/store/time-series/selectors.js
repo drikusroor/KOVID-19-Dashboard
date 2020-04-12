@@ -140,6 +140,23 @@ export const getGrowthNumbers = (rows) => {
   })
 }
 
+export const getGrowthPercentage = (rows) => {
+  return rows.map((row) => {
+    return row.reduce((acc, curr, index, array) => {
+      if (index < 4) {
+        return [...acc, curr]
+      } else if (index === 4) {
+        return [...acc, null]
+      } else {
+        return [
+          ...acc,
+          curr && array[index - 1] ? (100 * curr) / array[index - 1] : null,
+        ]
+      }
+    }, [])
+  })
+}
+
 export const getFilteredTimeSeries = createSelector(
   [getTimeSeries, getForms, getChart],
   (datasets, forms, chart) => {
@@ -225,6 +242,8 @@ export const getFilteredTimeSeries = createSelector(
 
     if (type === CHART_TYPES.GROWTH_NUMBER) {
       datasets = modifyTimeSerieRows(datasets, getGrowthNumbers)
+    } else if (type === CHART_TYPES.GROWTH_PERCENTAGE) {
+      datasets = modifyTimeSerieRows(datasets, getGrowthPercentage)
     }
 
     if (showEstimates) {
