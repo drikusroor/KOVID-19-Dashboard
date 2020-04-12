@@ -12,6 +12,8 @@ import {
   setScaleType,
   SCALE_TYPES,
 } from '../../store/chart/actions'
+import BarIcon from '@material-ui/icons/BarChart'
+import LineIcon from '@material-ui/icons/ShowChart'
 import { connect } from 'react-redux'
 
 const useStyles = makeStyles((theme) => ({
@@ -137,7 +139,7 @@ export function PureChart({
               disableRipple={chart.aggType === AGG_TYPES.GROWTH_PERCENTAGE}
               disableFocusRipple={chart.aggType === AGG_TYPES.GROWTH_PERCENTAGE}
             >
-              DoD Growth
+              DoD Growth %
             </ToggleButton>
           </ToggleButtonGroup>
         </Grid>
@@ -190,7 +192,7 @@ export function PureChart({
               disableRipple={chart.chartType === CHART_TYPES.BAR}
               disableFocusRipple={chart.chartType === CHART_TYPES.BAR}
             >
-              Bar
+              <BarIcon />
             </ToggleButton>
             <ToggleButton
               component={Button}
@@ -205,7 +207,7 @@ export function PureChart({
               disableRipple={chart.chartType === CHART_TYPES.LINE}
               disableFocusRipple={chart.chartType === CHART_TYPES.LINE}
             >
-              Line
+              <LineIcon />
             </ToggleButton>
           </ToggleButtonGroup>
         </Grid>
