@@ -132,6 +132,10 @@ const FilterForm = (props) => {
     return value
   }
 
+  const handlePastThirtyDays = () => {
+    change('dates', [dates.length - 31, dates.length - 1])
+  }
+
   const handlePastTwoWeeks = () => {
     change('dates', [dates.length - 15, dates.length - 1])
   }
@@ -181,7 +185,7 @@ const FilterForm = (props) => {
             />
           </div>
         </Grid>
-        <Grid item xs={12} md={9}>
+        <Grid item xs={12} md={8}>
           {SLIDER_ENABLED && marks && marks.length > 0 ? (
             <Box className={classes.slider}>
               <Field
@@ -202,15 +206,24 @@ const FilterForm = (props) => {
             </Box>
           ) : null}
         </Grid>
-        <Grid item>
-          <Button variant="outlined" onClick={handlePastTwoWeeks}>
-            Past 2 weeks
-          </Button>
-        </Grid>
-        <Grid item>
-          <IconButton onClick={resetDates}>
-            <Clear />
-          </IconButton>
+        <Grid item xs={12} md={4}>
+          <Grid container spacing={4} alignItems="center">
+            <Grid item>
+              <Button variant="outlined" onClick={handlePastThirtyDays}>
+                30 days
+              </Button>
+            </Grid>
+            <Grid item>
+              <Button variant="outlined" onClick={handlePastTwoWeeks}>
+                2 weeks
+              </Button>
+            </Grid>
+            <Grid item>
+              <IconButton onClick={resetDates}>
+                <Clear />
+              </IconButton>
+            </Grid>
+          </Grid>
         </Grid>
         <Grid item xs={12}>
           <Grid container spacing={4}>
