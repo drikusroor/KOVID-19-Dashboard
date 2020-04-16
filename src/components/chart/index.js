@@ -66,13 +66,17 @@ export function PureChart({
   const labels = headers.slice(4, headers.length)
   const topRows = rows.slice(0, rows.length > 8 ? 8 : rows.length)
 
+  const useFloatValues = chart.aggType === AGG_TYPES.GROWTH_PERCENTAGE
+
   const datasets = topRows.map((row, index) => {
     return {
       label: showPerCountry
         ? row[1]
         : `${row[0] ? row[0] + ', ' : ''}${row[1]}`,
       type: line ? 'line' : 'bar',
-      data: row.slice(4, row.length).map((value) => parseInt(value)),
+      data: row
+        .slice(4, row.length)
+        .map((value) => (useFloatValues ? value : parseInt(value))),
       borderColor: colors[index],
       fillColor: colors[index],
       strokeColor: colors[index],
