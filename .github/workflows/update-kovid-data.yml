@@ -1,0 +1,29 @@
+# This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+
+name: Node.js CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Checkout submodules
+        uses: CSSEGISandData/COVID-19
+      - name: FTP Deploy
+        uses: SamKirkland/FTP-Deploy-Action@3.0.0
+        with:
+          ftp-server: kokokoding.nl/domains/kokokoding.nl/public_html/kovid-19/COVID-19
+          ftp-username: ${{ secrets.FtpUser }}
+          ftp-password: ${{ secrets.FtpPassword }}
+          local-dir: /
+          git-ftp-args: --all
+        env:
+          CI: true
