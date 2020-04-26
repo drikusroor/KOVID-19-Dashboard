@@ -15,12 +15,13 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - name: FTP Deploy
-        uses: SamKirkland/FTP-Deploy-Action@3.0.0
+      - name: Fast FTP Deploy
+        uses: swznd/ftp-deploy@v1.0.1
         with:
-          ftp-server: kokokoding.nl/domains/kokokoding.nl/public_html/kovid-19/COVID-19
-          ftp-username: ${{ secrets.FtpUser }}
-          ftp-password: ${{ secrets.FtpPassword }}
-          local-dir: /public/Covid-19
+          host: kokokoding.nl
+          user: ${{ secrets.FtpUser }}
+          password: ${{ secrets.FtpPassword }}
+          local_path: /public/Covid-19
+          remote_path: /domains/kokokoding.nl/public_html/kovid-19/COVID-19
         env:
           CI: true
