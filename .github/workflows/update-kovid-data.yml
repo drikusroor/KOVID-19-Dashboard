@@ -16,7 +16,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Checkout submodules
-        uses: 'CSSEGISandData/COVID-19'
+        uses: 'CSSEGISandData/COVID-19@master'
       - name: FTP Deploy
         uses: SamKirkland/FTP-Deploy-Action@3.0.0
         with:
