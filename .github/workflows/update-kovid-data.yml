@@ -22,6 +22,5 @@ jobs:
           ftp-username: ${{ secrets.FtpUser }}
           ftp-password: ${{ secrets.FtpPassword }}
           local-dir: /public/Covid-19
-          git-ftp-args: --all
         env:
           CI: true
