@@ -15,15 +15,13 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - name: Checkout submodules
-        uses: 'CSSEGISandData/COVID-19@master'
       - name: FTP Deploy
         uses: SamKirkland/FTP-Deploy-Action@3.0.0
         with:
           ftp-server: kokokoding.nl/domains/kokokoding.nl/public_html/kovid-19/COVID-19
           ftp-username: ${{ secrets.FtpUser }}
           ftp-password: ${{ secrets.FtpPassword }}
-          local-dir: /
+          local-dir: /public/Covid-19
           git-ftp-args: --all
         env:
           CI: true
