@@ -14,9 +14,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout repo
       - uses: actions/checkout@v2
-        with:
-          submodules: true
+      - name: Checkout submodules
+        uses: textbook/git-checkout-submodule-action@master
       - name: Fast FTP Deploy
         uses: swznd/ftp-deploy@v1.0.1
         with:
