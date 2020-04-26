@@ -25,7 +25,7 @@ jobs:
           host: kokokoding.nl
           user: ${{ secrets.FtpUser }}
           password: ${{ secrets.FtpPassword }}
-          src: /public/Covid-19
+          src: /public/Covid-19/**/*
           dest: /domains/kokokoding.nl/public_html/kovid-19/COVID-19
         env:
           CI: true
