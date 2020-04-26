@@ -19,13 +19,13 @@ jobs:
       - name: Checkout submodules
         uses: textbook/git-checkout-submodule-action@master
       
-      - name: Simple File Upload
-        uses: bayssmekanique/action-simple-file-upload@v1.1.3
+      - name: dist-to-ft
+        uses: isthatcentered/dist-to-ftp@v1
         with:
           host: kokokoding.nl
           user: ${{ secrets.FtpUser }}
           password: ${{ secrets.FtpPassword }}
-          src: /public/Covid-19/**/*
-          dest: /domains/kokokoding.nl/public_html/kovid-19/COVID-19
+          path: /public/Covid-19
+          into: /domains/kokokoding.nl/public_html/kovid-19/COVID-19
         env:
           CI: true
