@@ -16,7 +16,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout repo
+        uses: actions/checkout@v2
+        with:
+          repository: CSSEGISandData/COVID-19
+          path: public/COVID-19
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn cache dir)"
@@ -34,13 +38,13 @@ jobs:
       - uses: Borales/actions-yarn@v2.1.0
         with:
           cmd: build
-      - name: FTP Deploy
-        uses: SamKirkland/FTP-Deploy-Action@3.0.0
+      - name: dist-to-ft
+        uses: isthatcentered/dist-to-ftp@v1
         with:
-          ftp-server: kokokoding.nl/domains/kokokoding.nl/public_html/kovid-19
-          ftp-username: ${{ secrets.FtpUser }}
-          ftp-password: ${{ secrets.FtpPassword }}
-          local-dir: build/
-          git-ftp-args: --all
+          host: kokokoding.nl
+          user: ${{ secrets.FtpUser }}
+          password: ${{ secrets.FtpPassword }}
+          path: ./build
+          into: /domains/kokokoding.nl/public_html/kovid-19
         env:
           CI: true
