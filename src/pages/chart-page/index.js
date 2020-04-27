@@ -14,7 +14,6 @@ import { Grid } from '@material-ui/core'
 import Skeleton from '@material-ui/lab/Skeleton'
 
 const ChartPage = ({
-  chart,
   countries,
   initialFilters,
   filters,
@@ -25,7 +24,7 @@ const ChartPage = ({
   const { type } = useParams()
   useEffect(() => {
     fetchTimeSeries(type)
-  }, [])
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <Layout title="COVID-19 histogram per country">

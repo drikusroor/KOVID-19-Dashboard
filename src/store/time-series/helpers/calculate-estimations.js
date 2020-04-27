@@ -6,6 +6,7 @@ export const estimateConfirmedRow = (
   const dRow = deaths.data.find(([dRegion, dCountry]) => {
     return region === dRegion && country === dCountry
   })
+  // eslint-disable-next-line no-unused-vars
   const [_dRegion, _dCountry, _dLat, _dLon, ...dData] = dRow
 
   const { deathRate, timeToDeath } = filters
