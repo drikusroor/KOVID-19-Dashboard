@@ -18,14 +18,13 @@ jobs:
         uses: actions/checkout@v2
       - name: Checkout submodules
         uses: textbook/git-checkout-submodule-action@master
-      
       - name: dist-to-ft
         uses: isthatcentered/dist-to-ftp@v1
         with:
           host: kokokoding.nl
           user: ${{ secrets.FtpUser }}
           password: ${{ secrets.FtpPassword }}
-          path: /public/Covid-19
+          path: ./public/COVID-19
           into: /domains/kokokoding.nl/public_html/kovid-19/COVID-19
         env:
           CI: true
