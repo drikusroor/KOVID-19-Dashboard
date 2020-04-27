@@ -1,7 +1,6 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import { Line } from 'react-chartjs-2'
-import _ from 'lodash'
 import { Button, Paper, Grid } from '@material-ui/core'
 import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab'
 import {

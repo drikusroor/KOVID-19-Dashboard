@@ -1,7 +1,7 @@
 import React from 'react'
 import { Layout } from '../../components/layout'
 
-export default function() {
+export default function () {
   return (
     <Layout title="About this website">
       <p>
@@ -13,7 +13,7 @@ export default function() {
         <b>
           <a
             href="https://github.com/CSSEGISandData/COVID-19"
-            rel="noopener"
+            rel="noopener noreferrer"
             target="_blank"
           >
             2019 Novel Coronavirus COVID-19 (2019-nCoV) Data Repository by Johns

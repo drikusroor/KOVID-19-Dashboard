@@ -15,7 +15,6 @@ import {
   Tooltip,
   Box,
   IconButton,
-  Icon,
 } from '@material-ui/core'
 import {
   getHeaders,
