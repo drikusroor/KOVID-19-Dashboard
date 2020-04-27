@@ -6,8 +6,6 @@ name: CI - Build & deploy
 on:
   push:
     branches: [master]
-    branches-ignore:
-      - '**'
 
 jobs:
   build:
