@@ -21,8 +21,9 @@ jobs:
       - name: Update data
         shell: bash
         run: |
-          cd public/COVID-19
-          git pull
+          git submodule update --recursive
+#           cd public/COVID-19
+#           git pull
       - name: dist-to-ft
         uses: isthatcentered/dist-to-ftp@v1
         with:
