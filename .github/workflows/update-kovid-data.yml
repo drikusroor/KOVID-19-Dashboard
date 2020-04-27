@@ -16,14 +16,9 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
-      - name: Checkout submodules
-        uses: textbook/git-checkout-submodule-action@master
-      - name: Update data
-        shell: bash
-        run: |
-          git submodule update --recursive
-#           cd public/COVID-19
-#           git pull
+        with:
+          repository: CSSEGISandData/COVID-19
+          path: public/COVID-19
       - name: dist-to-ft
         uses: isthatcentered/dist-to-ftp@v1
         with:
