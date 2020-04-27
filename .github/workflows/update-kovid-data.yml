@@ -18,6 +18,11 @@ jobs:
         uses: actions/checkout@v2
       - name: Checkout submodules
         uses: textbook/git-checkout-submodule-action@master
+      - name: Update data
+        shell: bash
+        run: |
+          cd public/COVID-19
+          git pull
       - name: dist-to-ft
         uses: isthatcentered/dist-to-ftp@v1
         with:
