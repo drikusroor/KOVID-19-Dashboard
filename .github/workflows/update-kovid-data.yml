@@ -2,7 +2,7 @@ name: CI - Update COVID-19 Data
 
 on:
   schedule:
-    - cron: '*/60 8 * * *'
+    - cron: '0 8 * * *'
 
 jobs:
   update-data:
