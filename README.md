@@ -10,6 +10,14 @@ Install dependencies:
 yarn
 ```
 
+Get the most recent COVID-19 data:
+
+```sh
+cd public/Covid-19
+git pull
+cd ../..
+```
+
 Start development server:
 
 ```sh
