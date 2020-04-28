@@ -22,5 +22,3 @@ jobs:
           password: ${{ secrets.FtpPassword }}
           path: ./public/COVID-19
           into: /domains/kokokoding.nl/public_html/kovid-19/COVID-19
-        env:
-          CI: true
