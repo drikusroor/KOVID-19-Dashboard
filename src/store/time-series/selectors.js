@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect'
 import { calculateEstimations } from './helpers/calculate-estimations'
-import { AGG_TYPES } from '../chart/actions'
+import { AGG_TYPES, AVG_TYPES } from '../chart/actions'
 
 const getTimeSeries = (state) => state.timeSeries.data
 const getChart = (state) => state.chart
@@ -128,6 +128,29 @@ export const getCountryFilteredTimeSeries = (rows, countryFilter = []) => {
   )
 }
 
+const getAverage = (values, index, amount) => {
+  const lastElements = values.slice(index - amount + 1, index + 1)
+  return (
+    lastElements.reduce(
+      (acc, curr) => (typeof curr === 'number' || index < 5 ? acc + curr : acc),
+      0,
+    ) / amount
+  )
+}
+
+export const getAverages = (rows, amount = 7) => {
+  return rows.map((row) => {
+    return row.reduce((acc, curr, index, array) => {
+      if (index < 5) {
+        return [...acc, curr]
+      } else {
+        const average = getAverage(array, index, amount)
+        return [...acc, average]
+      }
+    }, [])
+  })
+}
+
 export const getGrowthNumbers = (rows) => {
   return rows.map((row) => {
     return row.reduce((acc, curr, index, array) => {
@@ -166,8 +189,14 @@ export const getFilteredTimeSeries = createSelector(
 
     const { FilterForm } = forms
     const { values } = FilterForm || {}
-    const { countryFilter, dates, showEstimates, showPerCountry } = values || {}
-    const { aggType } = chart
+    const {
+      averageDaysAmount,
+      countryFilter,
+      dates,
+      showEstimates,
+      showPerCountry,
+    } = values || {}
+    const { aggType, avgType } = chart
 
     if (dates) {
       const [begin, end] = dates
@@ -225,6 +254,10 @@ export const getFilteredTimeSeries = createSelector(
       datasets = modifyTimeSerieRows(datasets, getGrowthNumbers)
     } else if (aggType === AGG_TYPES.GROWTH_PERCENTAGE) {
       datasets = modifyTimeSerieRows(datasets, getGrowthPercentage)
+    }
+
+    if (avgType === AVG_TYPES.AVERAGES) {
+      datasets = modifyTimeSerieRows(datasets, getAverages, averageDaysAmount)
     }
 
     if (showEstimates) {

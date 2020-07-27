@@ -22,6 +22,7 @@ import {
   getInitialDates,
 } from '../../store/time-series/selectors'
 import { getFilterFormValues } from '../../store/form/selectors'
+import { AVG_TYPES } from '../../store/chart/actions'
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -116,8 +117,17 @@ const renderSlider = ({
 }
 
 const FilterForm = (props) => {
-  const { change, countries, countryFilter, dates, filterFormValues } = props
+  const {
+    change,
+    chart,
+    countries,
+    countryFilter,
+    dates,
+    filterFormValues,
+  } = props
   const classes = useStyles()
+
+  const showAverageDaysAmount = chart.avgType === AVG_TYPES.AVERAGES
 
   const marks = [
     { value: 0, label: dates[0] },
@@ -266,6 +276,19 @@ const FilterForm = (props) => {
                 </Grid>
               </>
             ) : null}
+            {showAverageDaysAmount ? (
+              <Grid item xs={12} sm={6} md={4} lg={2}>
+                <div>
+                  <Field
+                    fullWidth
+                    name="averageDaysAmount"
+                    component={renderTextField}
+                    label="Amount of days to calculate average over"
+                    type="number"
+                  />
+                </div>
+              </Grid>
+            ) : null}
           </Grid>
         </Grid>
       </Grid>
@@ -279,9 +302,11 @@ export default compose(
     (state) => {
       return {
         countryFilter: selector(state, 'countryFilter'),
+        chart: state.chart,
         headers: getHeaders(state),
         dates: getDates(state),
         initialValues: {
+          averageDaysAmount: 7,
           countryFilter: [],
           deathRate: 0.014,
           timeToDeath: 17,

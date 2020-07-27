@@ -5,8 +5,10 @@ import { Button, Paper, Grid } from '@material-ui/core'
 import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab'
 import {
   AGG_TYPES,
+  AVG_TYPES,
   CHART_TYPES,
   setAggType,
+  setAvgType,
   setChartType,
   setScaleType,
   SCALE_TYPES,
@@ -51,6 +53,7 @@ export function PureChart({
   dataset,
   filters: { showPerCountry },
   setAggType,
+  setAvgType,
   setChartType,
   setScaleType,
 }) {
@@ -154,6 +157,39 @@ export function PureChart({
             <ToggleButton
               component={Button}
               onClick={() =>
+                chart.avgType !== AVG_TYPES.DAILY && setAvgType(AVG_TYPES.DAILY)
+              }
+              variant="contained"
+              color="secondary"
+              selected={chart.avgType === AVG_TYPES.DAILY}
+              classes={buttonClasses}
+              disableRipple={chart.avgType === AVG_TYPES.DAILY}
+              disableFocusRipple={chart.avgType === AVG_TYPES.DAILY}
+            >
+              Daily
+            </ToggleButton>
+            <ToggleButton
+              component={Button}
+              onClick={() =>
+                chart.avgType !== AVG_TYPES.AVERAGES &&
+                setAvgType(AVG_TYPES.AVERAGES)
+              }
+              variant="contained"
+              color="secondary"
+              selected={chart.avgType === AVG_TYPES.AVERAGES}
+              classes={buttonClasses}
+              disableRipple={chart.avgType === AVG_TYPES.AVERAGES}
+              disableFocusRipple={chart.avgType === AVG_TYPES.AVERAGES}
+            >
+              X-day average
+            </ToggleButton>
+          </ToggleButtonGroup>
+        </Grid>
+        <Grid item>
+          <ToggleButtonGroup variant="contained" color="secondary" size="small">
+            <ToggleButton
+              component={Button}
+              onClick={() =>
                 chart.scaleType !== SCALE_TYPES.LINEAR &&
                 setScaleType(SCALE_TYPES.LINEAR)
               }
@@ -232,6 +268,7 @@ export default connect(
   },
   {
     setAggType,
+    setAvgType,
     setChartType,
     setScaleType,
   },

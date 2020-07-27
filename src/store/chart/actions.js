@@ -7,6 +7,11 @@ export const AGG_TYPES = {
   GROWTH_PERCENTAGE: 'GROWTH_PERCENTAGE',
 }
 
+export const AVG_TYPES = {
+  DAILY: 'DAILY',
+  AVERAGES: 'AVERAGES',
+}
+
 export const CHART_TYPES = {
   BAR: 'BAR',
   LINE: 'LINE',
@@ -19,6 +24,11 @@ export const SCALE_TYPES = {
 
 export const setAggType = createAction(
   types.CHART_SET_AGG_TYPE,
+  (payload) => payload,
+)
+
+export const setAvgType = createAction(
+  types.CHART_SET_AVG_TYPE,
   (payload) => payload,
 )
 

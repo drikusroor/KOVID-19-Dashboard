@@ -8,6 +8,11 @@ export const chartReducer = function (state = initialState.chart, action) {
         ...state,
         aggType: action.payload,
       }
+    case types.CHART_SET_AVG_TYPE:
+      return {
+        ...state,
+        avgType: action.payload,
+      }
     case types.CHART_SET_CHART_TYPE:
       return {
         ...state,
