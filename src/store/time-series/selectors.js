@@ -210,32 +210,11 @@ export const getFilteredTimeSeries = createSelector(
         }
       })
     } else {
-      const china = modifyTimeSerieRows(
-        datasets,
-        getTimeSeriesTotalPerPredicate,
-        {
-          predicate: (row) => row[1] === 'China',
-          key: 'China',
-        },
-      )
-      const notChina = modifyTimeSerieRows(
-        datasets,
-        getTimeSeriesTotalPerPredicate,
-        {
-          predicate: (row) => row[1] !== 'China',
-          key: 'Not China',
-        },
-      )
-
       datasets = datasets.map((dataset, index) => {
         const { headers } = dataset
         return {
           headers,
-          data: [
-            ...china[index].data,
-            ...notChina[index].data,
-            ...total[index].data,
-          ],
+          data: [...total[index].data],
         }
       })
     }
