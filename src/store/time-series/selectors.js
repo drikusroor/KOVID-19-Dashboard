@@ -131,8 +131,10 @@ export const getCountryFilteredTimeSeries = (rows, countryFilter = []) => {
 export const getGrowthNumbers = (rows) => {
   return rows.map((row) => {
     return row.reduce((acc, curr, index, array) => {
-      if (index < 5) {
+      if (index < 4) {
         return [...acc, curr]
+      } else if (index === 4) {
+        return [...acc, 0]
       } else {
         return [...acc, curr - array[index - 1]]
       }
