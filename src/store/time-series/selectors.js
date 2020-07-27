@@ -257,7 +257,11 @@ export const getFilteredTimeSeries = createSelector(
     }
 
     if (avgType === AVG_TYPES.AVERAGES) {
-      datasets = modifyTimeSerieRows(datasets, getAverages, averageDaysAmount)
+      datasets = modifyTimeSerieRows(
+        datasets,
+        getAverages,
+        averageDaysAmount || 7,
+      )
     }
 
     if (showEstimates) {

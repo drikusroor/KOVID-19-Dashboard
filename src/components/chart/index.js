@@ -51,7 +51,7 @@ const colors = [
 export function PureChart({
   chart,
   dataset,
-  filters: { showPerCountry },
+  filters: { averageDaysAmount = 7, showPerCountry },
   setAggType,
   setAvgType,
   setChartType,
@@ -181,7 +181,7 @@ export function PureChart({
               disableRipple={chart.avgType === AVG_TYPES.AVERAGES}
               disableFocusRipple={chart.avgType === AVG_TYPES.AVERAGES}
             >
-              X-day average
+              {averageDaysAmount || 7}-day average
             </ToggleButton>
           </ToggleButtonGroup>
         </Grid>
