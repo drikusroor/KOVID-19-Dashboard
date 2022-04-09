@@ -12,7 +12,7 @@
     "chart.js": "^2.9.3",
     "clsx": "latest",
     "lodash": "^4.17.19",
-    "moment": "^2.24.0",
+    "moment": "^2.29.2",
     "papaparse": "^5.2.0",
     "react": "latest",
     "react-chartjs-2": "^2.9.0",
